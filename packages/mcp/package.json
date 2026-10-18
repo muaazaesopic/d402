@@ -1,0 +1,18 @@
+{
+  "name": "@d402/mcp",
+  "version": "0.1.0",
+  "description": "d402 MCP server: earn, status and fetch tools for agents",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "bin": { "d402-mcp": "./dist/bin.js" },
+  "files": ["dist"],
+  "scripts": { "build": "tsc -b", "test": "vitest run" },
+  "dependencies": {
+    "@d402/client": "workspace:*",
+    "@d402/spec": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.32.0",
+    "zod": "^4.0.0"
+  }
+}

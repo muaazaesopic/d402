@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.d402/
+*.db
+*.db-journal
+bench/out/

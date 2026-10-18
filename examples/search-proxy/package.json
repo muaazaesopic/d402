@@ -1,0 +1,13 @@
+{
+  "name": "d402-example-search-proxy",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": { "start": "tsx src/server.ts", "build": "tsc -b", "test": "vitest run" },
+  "dependencies": {
+    "@d402/server": "workspace:*",
+    "@d402/spec": "workspace:*",
+    "@hono/node-server": "^2.1.0",
+    "hono": "^4.13.0"
+  }
+}

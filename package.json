@@ -1,0 +1,24 @@
+{
+  "name": "d402-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "d402: pay for API access with labelled data instead of micropayments",
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "build": "pnpm -r --filter './packages/**' run build",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "test:e2e": "vitest run tests/e2e",
+    "test:unit": "vitest run packages",
+    "bench": "pnpm --filter d402-bench run bench",
+    "example": "pnpm --filter d402-example-search-proxy run start"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.0",
+    "vitest": "^4.0.0"
+  }
+}

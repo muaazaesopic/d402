@@ -1,0 +1,12 @@
+{
+  "name": "@d402/spec",
+  "version": "0.1.0",
+  "description": "d402 protocol types, schemas, headers and signing helpers",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist"],
+  "scripts": { "build": "tsc -b", "test": "vitest run" },
+  "dependencies": { "zod": "^4.0.0" }
+}

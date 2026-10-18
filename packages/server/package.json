@@ -1,0 +1,18 @@
+{
+  "name": "@d402/server",
+  "version": "0.1.0",
+  "description": "d402 seller middleware: gate routes with labelled-data vouchers",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "bin": { "d402-tasks": "./dist/cli.js" },
+  "files": ["dist"],
+  "scripts": { "build": "tsc -b", "test": "vitest run" },
+  "dependencies": {
+    "@d402/spec": "workspace:*",
+    "hono": "^4.13.0",
+    "jose": "^6.2.0",
+    "zod": "^4.0.0"
+  }
+}
