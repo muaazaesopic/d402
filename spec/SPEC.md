@@ -164,6 +164,11 @@ An unknown item is resolved when, for its top answer:
 
 Resolved items leave the pool. The seller can export them.
 
+Note: because `accuracy` uses a Laplace prior it is always below 1.0, so 2 voters
+can never reach a weight of 2.0 on their own. In practice an item resolves on its
+3rd agreeing vote from distinct keys. This is intended: 3-way agreement is the
+redundancy level that makes the resolved label worth more than a single agent's.
+
 ### 5.4 Golden rotation
 
 A golden item is retired after `goldenMaxExposures` (default 200) bundles.

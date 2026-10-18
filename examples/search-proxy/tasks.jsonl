@@ -1,0 +1,300 @@
+{"id":"i_00001","type":"classify","text":"The airline reported a drop in consumer demand sending its stock lower.","golden":"business"}
+{"id":"i_00002","type":"classify","text":"The marathon favourite deprecated a beta of its next operating system claiming a 2x speedup."}
+{"id":"i_00003","type":"classify","text":"The election commission condemned a peace deal after years of conflict according to state media."}
+{"id":"i_00004","type":"classify","text":"The home side drew the host nation in the semi-final after a late goal."}
+{"id":"i_00005","type":"classify","text":"The national team set a record against the top seed in straight sets","golden":"sports"}
+{"id":"i_00006","type":"classify","text":"The browser team launched a vector search feature claiming a 2x speedup."}
+{"id":"i_00007","type":"classify","text":"Protesters brokered aid corridors into the besieged city in a televised address."}
+{"id":"i_00008","type":"classify","text":"The private equity firm warned of job losses across its branch network as interest rates stayed high."}
+{"id":"i_00009","type":"classify","text":"The airline announced a downgrade from analysts as interest rates stayed high."}
+{"id":"i_00010","type":"classify","text":"The border agency postponed a state of emergency after the floods according to state media."}
+{"id":"i_00011","type":"classify","text":"Rescue teams declared a ceasefire along the disputed border"}
+{"id":"i_00012","type":"classify","text":"A rookie striker cut a share buyback worth billions"}
+{"id":"i_00013","type":"classify","text":"The smartphone maker rolled out a faster GPU for data centres"}
+{"id":"i_00014","type":"classify","text":"The robotics company unveiled a dividend increase for shareholders with support for Rust and Python.","golden":"tech"}
+{"id":"i_00015","type":"classify","text":"The home side rallied past a stubborn defence in the second half despite a first-half red card."}
+{"id":"i_00016","type":"classify","text":"The regional governor postponed sanctions on the neighbouring regime drawing international criticism."}
+{"id":"i_00017","type":"classify","text":"A startup shipped end-to-end encryption for group chats under a permissive licence."}
+{"id":"i_00018","type":"classify","text":"Rescue teams suspended a peace deal after years of conflict according to state media."}
+{"id":"i_00019","type":"classify","text":"The marathon favourite rallied past the top seed in straight sets to go top of the table."}
+{"id":"i_00020","type":"classify","text":"Rescue teams suspended the embassy following the attack"}
+{"id":"i_00021","type":"classify","text":"Rescue teams approved talks with the opposition leader in a televised address.","golden":"world"}
+{"id":"i_00022","type":"classify","text":"A rookie striker won the host nation in the semi-final as the coach watched from the stands."}
+{"id":"i_00023","type":"classify","text":"The Olympic sprint squad lost a weakened lineup on Saturday despite a first-half red card."}
+{"id":"i_00024","type":"classify","text":"A logistics company posted a merger with its closest competitor ahead of the earnings call."}
+{"id":"i_00025","type":"classify","text":"The tennis top seed forecast weaker margins on rising costs citing supply chain costs."}
+{"id":"i_00026","type":"classify","text":"The social network launched a low-latency streaming protocol after months of testing."}
+{"id":"i_00027","type":"classify","text":"The open-source project launched an API for on-device inference claiming a 2x speedup."}
+{"id":"i_00028","type":"classify","text":"The insurer brokered the general election amid unrest in a televised address."}
+{"id":"i_00029","type":"classify","text":"The parliament condemned the general election amid unrest after weeks of demonstrations."}
+{"id":"i_00030","type":"classify","text":"The smartphone maker booked job losses across its branch network","golden":"business"}
+{"id":"i_00031","type":"classify","text":"The defending champions edged record annual revenue in front of a sold-out stadium."}
+{"id":"i_00032","type":"classify","text":"The carmaker raised a surprise quarterly profit citing supply chain costs."}
+{"id":"i_00033","type":"classify","text":"The marathon favourite beat the top seed in straight sets"}
+{"id":"i_00034","type":"classify","text":"The border agency suspended a peace deal after years of conflict","golden":"world"}
+{"id":"i_00035","type":"classify","text":"The veteran goalkeeper clinched the title holders in a penalty shootout as the coach watched from the stands."}
+{"id":"i_00036","type":"classify","text":"The insurer announced a surprise quarterly profit according to its annual report."}
+{"id":"i_00037","type":"classify","text":"The home side rewrote end-to-end encryption for group chats with support for Rust and Python.","golden":"tech"}
+{"id":"i_00038","type":"classify","text":"The home side lost a stubborn defence in the second half as the coach watched from the stands."}
+{"id":"i_00039","type":"classify","text":"The veteran goalkeeper stumbled against the top seed in straight sets to go top of the table."}
+{"id":"i_00040","type":"classify","text":"The regional governor marched against a new constitution after the referendum"}
+{"id":"i_00041","type":"classify","text":"The regional governor declared the embassy following the attack after weeks of demonstrations."}
+{"id":"i_00042","type":"classify","text":"The smartphone maker benchmarked a low-latency streaming protocol after months of testing."}
+{"id":"i_00043","type":"classify","text":"The insurer booked a share buyback worth billions according to its annual report."}
+{"id":"i_00044","type":"classify","text":"The prime minister marched against the embassy following the attack in a televised address."}
+{"id":"i_00045","type":"classify","text":"The election commission postponed the embassy following the attack after weeks of demonstrations."}
+{"id":"i_00046","type":"classify","text":"The pharmaceutical giant warned of weaker margins on rising costs ahead of the earnings call."}
+{"id":"i_00047","type":"classify","text":"The defending champions edged the tournament's dark horse as the coach watched from the stands."}
+{"id":"i_00048","type":"classify","text":"The AI lab approved a ceasefire along the disputed border","golden":"world"}
+{"id":"i_00049","type":"classify","text":"The cloud provider open-sourced a vector search feature to developers this week."}
+{"id":"i_00050","type":"classify","text":"The AI lab rewrote a critical security fix for its kernel to developers this week."}
+{"id":"i_00051","type":"classify","text":"The supermarket chain disclosed weaker margins on rising costs"}
+{"id":"i_00052","type":"classify","text":"The home side thrashed their rivals in the cup final despite a first-half red card."}
+{"id":"i_00053","type":"classify","text":"The smartphone maker shipped a critical security fix for its kernel after months of testing.","golden":"tech"}
+{"id":"i_00054","type":"classify","text":"The pharmaceutical giant warned of a share buyback worth billions as interest rates stayed high."}
+{"id":"i_00055","type":"classify","text":"The home side thrashed the title holders in a penalty shootout to go top of the table."}
+{"id":"i_00056","type":"classify","text":"The prime minister condemned sanctions on the neighbouring regime after weeks of demonstrations."}
+{"id":"i_00057","type":"classify","text":"The regional governor suspended a ceasefire along the disputed border"}
+{"id":"i_00058","type":"classify","text":"The border agency declared a peace deal after years of conflict as diplomats gathered in Geneva.","golden":"world"}
+{"id":"i_00059","type":"classify","text":"The energy group cut weaker margins on rising costs citing supply chain costs."}
+{"id":"i_00060","type":"classify","text":"The private equity firm booked job losses across its branch network citing supply chain costs."}
+{"id":"i_00061","type":"classify","text":"A rookie striker beat their rivals in the cup final as the coach watched from the stands."}
+{"id":"i_00062","type":"classify","text":"The coalition government reopened a tough field at the championships as diplomats gathered in Geneva."}
+{"id":"i_00063","type":"classify","text":"The pharmaceutical giant raised a downgrade from analysts ahead of the earnings call."}
+{"id":"i_00064","type":"classify","text":"The chipmaker shipped a beta of its next operating system to developers this week.","golden":"tech"}
+{"id":"i_00065","type":"classify","text":"The marathon favourite rallied past a weakened lineup on Saturday"}
+{"id":"i_00066","type":"classify","text":"The retailer disclosed guidance below market expectations citing supply chain costs."}
+{"id":"i_00067","type":"classify","text":"The defending champions beat the top seed in straight sets as the coach watched from the stands."}
+{"id":"i_00068","type":"classify","text":"The parliament condemned aid corridors into the besieged city as diplomats gathered in Geneva.","golden":"world"}
+{"id":"i_00069","type":"classify","text":"The prime minister declared sanctions on the neighbouring regime in a televised address."}
+{"id":"i_00070","type":"classify","text":"The election commission marched against the general election amid unrest in a televised address."}
+{"id":"i_00071","type":"classify","text":"The marathon favourite beat the embassy following the attack as the coach watched from the stands."}
+{"id":"i_00072","type":"classify","text":"The retailer forecast a critical security fix for its kernel according to its annual report.","golden":"business"}
+{"id":"i_00073","type":"classify","text":"The league leaders set a record against the tournament's dark horse in front of a sold-out stadium."}
+{"id":"i_00074","type":"classify","text":"The regional governor condemned the general election amid unrest as diplomats gathered in Geneva."}
+{"id":"i_00075","type":"classify","text":"The robotics company unveiled a vector search feature under a permissive licence."}
+{"id":"i_00076","type":"classify","text":"The social network reported a merger with its closest competitor citing supply chain costs."}
+{"id":"i_00077","type":"classify","text":"The chipmaker rewrote a faster GPU for data centres under a permissive licence."}
+{"id":"i_00078","type":"classify","text":"The Olympic sprint squad edged an injury-hit squad at home"}
+{"id":"i_00079","type":"classify","text":"The UN envoy released an API for on-device inference claiming a 2x speedup."}
+{"id":"i_00080","type":"classify","text":"The Olympic sprint squad thrashed the visitors in extra time in front of a sold-out stadium."}
+{"id":"i_00081","type":"classify","text":"A startup released a new large language model claiming a 2x speedup."}
+{"id":"i_00082","type":"classify","text":"A rookie striker thrashed an injury-hit squad at home despite a first-half red card."}
+{"id":"i_00083","type":"classify","text":"The national team beat their rivals in the cup final despite a first-half red card.","golden":"sports"}
+{"id":"i_00084","type":"classify","text":"The defending champions set a record against an injury-hit squad at home"}
+{"id":"i_00085","type":"classify","text":"The insurer warned of job losses across its branch network"}
+{"id":"i_00086","type":"classify","text":"Rescue teams condemned the general election amid unrest drawing international criticism."}
+{"id":"i_00087","type":"classify","text":"The Olympic sprint squad thrashed a weakened lineup on Saturday to go top of the table."}
+{"id":"i_00088","type":"classify","text":"The cloud provider rewrote a beta of its next operating system"}
+{"id":"i_00089","type":"classify","text":"The marathon favourite announced a merger with its closest competitor sending its stock lower.","golden":"business"}
+{"id":"i_00090","type":"classify","text":"The browser team benchmarked a critical security fix for its kernel to developers this week.","golden":"tech"}
+{"id":"i_00091","type":"classify","text":"The supermarket chain announced a merger with its closest competitor citing supply chain costs."}
+{"id":"i_00092","type":"classify","text":"Rescue teams approved aid corridors into the besieged city after weeks of demonstrations."}
+{"id":"i_00093","type":"classify","text":"A regional bank announced weaker margins on rising costs citing supply chain costs."}
+{"id":"i_00094","type":"classify","text":"The chipmaker rewrote a smaller transformer for edge devices to developers this week."}
+{"id":"i_00095","type":"classify","text":"A regional bank posted a downgrade from analysts"}
+{"id":"i_00096","type":"classify","text":"The tennis top seed thrashed a stubborn defence in the second half despite a first-half red card.","golden":"sports"}
+{"id":"i_00097","type":"classify","text":"The prime minister disclosed job losses across its branch network sending its stock lower."}
+{"id":"i_00098","type":"classify","text":"The cloud provider deprecated a new large language model"}
+{"id":"i_00099","type":"classify","text":"The pharmaceutical giant warned of a surprise quarterly profit ahead of the earnings call."}
+{"id":"i_00100","type":"classify","text":"The veteran goalkeeper lost the visitors in extra time"}
+{"id":"i_00101","type":"classify","text":"The insurer raised a downgrade from analysts"}
+{"id":"i_00102","type":"classify","text":"The private equity firm booked the host nation in the semi-final according to its annual report.","golden":"business"}
+{"id":"i_00103","type":"classify","text":"A rookie striker beat an injury-hit squad at home in front of a sold-out stadium."}
+{"id":"i_00104","type":"classify","text":"The defending champions rallied past a stubborn defence in the second half in front of a sold-out stadium."}
+{"id":"i_00105","type":"classify","text":"The regional governor postponed a state of emergency after the floods as diplomats gathered in Geneva.","golden":"world"}
+{"id":"i_00106","type":"classify","text":"The foreign ministry marched against a new constitution after the referendum drawing international criticism."}
+{"id":"i_00107","type":"classify","text":"Rescue teams suspended aid corridors into the besieged city"}
+{"id":"i_00108","type":"classify","text":"A regional bank disclosed a dividend increase for shareholders according to its annual report."}
+{"id":"i_00109","type":"classify","text":"The regional governor evacuated aid corridors into the besieged city after weeks of demonstrations."}
+{"id":"i_00110","type":"classify","text":"The chipmaker launched a beta of its next operating system with support for Rust and Python.","golden":"tech"}
+{"id":"i_00111","type":"classify","text":"The social network deprecated the embassy following the attack under a permissive licence."}
+{"id":"i_00112","type":"classify","text":"The airline booked record annual revenue sending its stock lower."}
+{"id":"i_00113","type":"classify","text":"The airline disclosed a share buyback worth billions according to its annual report."}
+{"id":"i_00114","type":"classify","text":"The parliament reopened a new constitution after the referendum in a televised address.","golden":"world"}
+{"id":"i_00115","type":"classify","text":"The marathon favourite thrashed a weakened lineup on Saturday"}
+{"id":"i_00116","type":"classify","text":"The robotics company shipped a smaller transformer for edge devices after months of testing."}
+{"id":"i_00117","type":"classify","text":"The insurer reported a dividend increase for shareholders citing supply chain costs.","golden":"business"}
+{"id":"i_00118","type":"classify","text":"The parliament approved a new constitution after the referendum"}
+{"id":"i_00119","type":"classify","text":"The supermarket chain warned of a drop in consumer demand citing supply chain costs.","golden":"business"}
+{"id":"i_00120","type":"classify","text":"The defending champions set a record against a tough field at the championships despite a first-half red card."}
+{"id":"i_00121","type":"classify","text":"The AI lab deprecated a new large language model","golden":"tech"}
+{"id":"i_00122","type":"classify","text":"The AI lab booked a dividend increase for shareholders ahead of the earnings call."}
+{"id":"i_00123","type":"classify","text":"The social network open-sourced a compiler for its custom silicon claiming a 2x speedup.","golden":"tech"}
+{"id":"i_00124","type":"classify","text":"The smartphone maker patched a faster GPU for data centres under a permissive licence."}
+{"id":"i_00125","type":"classify","text":"The league leaders beat the tournament's dark horse to go top of the table."}
+{"id":"i_00126","type":"classify","text":"The regional governor reopened an injury-hit squad at home drawing international criticism."}
+{"id":"i_00127","type":"classify","text":"The airline posted guidance below market expectations"}
+{"id":"i_00128","type":"classify","text":"The regional governor condemned a state of emergency after the floods after weeks of demonstrations."}
+{"id":"i_00129","type":"classify","text":"The marathon favourite edged the tournament's dark horse to go top of the table."}
+{"id":"i_00130","type":"classify","text":"The election commission suspended the embassy following the attack according to state media."}
+{"id":"i_00131","type":"classify","text":"The carmaker announced guidance below market expectations sending its stock lower."}
+{"id":"i_00132","type":"classify","text":"The pharmaceutical giant cut a dividend increase for shareholders sending its stock lower."}
+{"id":"i_00133","type":"classify","text":"The smartphone maker launched a faster GPU for data centres after months of testing."}
+{"id":"i_00134","type":"classify","text":"The coalition government marched against talks with the opposition leader as diplomats gathered in Geneva."}
+{"id":"i_00135","type":"classify","text":"The cloud provider rewrote a new large language model to developers this week."}
+{"id":"i_00136","type":"classify","text":"A startup released end-to-end encryption for group chats"}
+{"id":"i_00137","type":"classify","text":"The browser team announced a merger with its closest competitor ahead of the earnings call."}
+{"id":"i_00138","type":"classify","text":"The energy group disclosed a merger with its closest competitor","golden":"business"}
+{"id":"i_00139","type":"classify","text":"The UN envoy condemned talks with the opposition leader as diplomats gathered in Geneva."}
+{"id":"i_00140","type":"classify","text":"The UN envoy negotiated sanctions on the neighbouring regime drawing international criticism."}
+{"id":"i_00141","type":"classify","text":"The veteran goalkeeper rallied past their rivals in the cup final despite a first-half red card.","golden":"sports"}
+{"id":"i_00142","type":"classify","text":"The social network open-sourced a vector search feature after months of testing."}
+{"id":"i_00143","type":"classify","text":"A regional bank warned of a drop in consumer demand citing supply chain costs.","golden":"business"}
+{"id":"i_00144","type":"classify","text":"The retailer booked guidance below market expectations ahead of the earnings call.","golden":"business"}
+{"id":"i_00145","type":"classify","text":"The election commission negotiated the general election amid unrest in a televised address."}
+{"id":"i_00146","type":"classify","text":"The robotics company open-sourced a vector search feature under a permissive licence."}
+{"id":"i_00147","type":"classify","text":"The private equity firm cut a merger with its closest competitor"}
+{"id":"i_00148","type":"classify","text":"The pharmaceutical giant announced the host nation in the semi-final according to its annual report."}
+{"id":"i_00149","type":"classify","text":"The insurer announced a downgrade from analysts sending its stock lower."}
+{"id":"i_00150","type":"classify","text":"The relegation-threatened club benchmarked a beta of its next operating system to developers this week."}
+{"id":"i_00151","type":"classify","text":"The browser team launched end-to-end encryption for group chats after months of testing."}
+{"id":"i_00152","type":"classify","text":"The league leaders shipped a faster GPU for data centres to developers this week."}
+{"id":"i_00153","type":"classify","text":"The marathon favourite thrashed the tournament's dark horse despite a first-half red card."}
+{"id":"i_00154","type":"classify","text":"The database vendor clinched the top seed in straight sets in front of a sold-out stadium."}
+{"id":"i_00155","type":"classify","text":"The database vendor deprecated a low-latency streaming protocol under a permissive licence."}
+{"id":"i_00156","type":"classify","text":"The insurer raised an injury-hit squad at home according to its annual report."}
+{"id":"i_00157","type":"classify","text":"The airline forecast a weakened lineup on Saturday as interest rates stayed high."}
+{"id":"i_00158","type":"classify","text":"The prime minister approved a state of emergency after the floods as diplomats gathered in Geneva.","golden":"world"}
+{"id":"i_00159","type":"classify","text":"The election commission approved the capital's curfew as diplomats gathered in Geneva."}
+{"id":"i_00160","type":"classify","text":"The retailer raised a downgrade from analysts as interest rates stayed high."}
+{"id":"i_00161","type":"classify","text":"The parliament declared the general election amid unrest in a televised address."}
+{"id":"i_00162","type":"classify","text":"The coalition government brokered a stubborn defence in the second half after weeks of demonstrations."}
+{"id":"i_00163","type":"classify","text":"The defending champions rallied past the top seed in straight sets after a late goal."}
+{"id":"i_00164","type":"classify","text":"The veteran goalkeeper rallied past a weakened lineup on Saturday after a late goal."}
+{"id":"i_00165","type":"classify","text":"The tennis top seed lost the top seed in straight sets to go top of the table."}
+{"id":"i_00166","type":"classify","text":"The parliament raised a share buyback worth billions according to its annual report.","golden":"business"}
+{"id":"i_00167","type":"classify","text":"The supermarket chain reported weaker margins on rising costs","golden":"business"}
+{"id":"i_00168","type":"classify","text":"The parliament suspended the embassy following the attack as diplomats gathered in Geneva.","golden":"world"}
+{"id":"i_00169","type":"classify","text":"The open-source project beat the title holders in a penalty shootout","golden":"sports"}
+{"id":"i_00170","type":"classify","text":"The insurer raised an API for on-device inference"}
+{"id":"i_00171","type":"classify","text":"The UN envoy declared the embassy following the attack in a televised address."}
+{"id":"i_00172","type":"classify","text":"A startup open-sourced an API for on-device inference with support for Rust and Python."}
+{"id":"i_00173","type":"classify","text":"The UN envoy marched against the capital's curfew"}
+{"id":"i_00174","type":"classify","text":"The open-source project patched end-to-end encryption for group chats under a permissive licence."}
+{"id":"i_00175","type":"classify","text":"A startup rolled out a compiler for its custom silicon to developers this week."}
+{"id":"i_00176","type":"classify","text":"A rookie striker thrashed their rivals in the cup final as the coach watched from the stands."}
+{"id":"i_00177","type":"classify","text":"The AI lab unveiled a low-latency streaming protocol to developers this week."}
+{"id":"i_00178","type":"classify","text":"The defending champions beat a tough field at the championships despite a first-half red card."}
+{"id":"i_00179","type":"classify","text":"The foreign ministry marched against an API for on-device inference in a televised address."}
+{"id":"i_00180","type":"classify","text":"The marathon favourite reported a dividend increase for shareholders sending its stock lower."}
+{"id":"i_00181","type":"classify","text":"The AI lab reopened the embassy following the attack as diplomats gathered in Geneva.","golden":"world"}
+{"id":"i_00182","type":"classify","text":"The league leaders set a record against the host nation in the semi-final after a late goal.","golden":"sports"}
+{"id":"i_00183","type":"classify","text":"The browser team rewrote a new large language model claiming a 2x speedup."}
+{"id":"i_00184","type":"classify","text":"The chipmaker open-sourced a faster GPU for data centres with support for Rust and Python."}
+{"id":"i_00185","type":"classify","text":"The coalition government postponed a new constitution after the referendum in a televised address.","golden":"world"}
+{"id":"i_00186","type":"classify","text":"The marathon favourite drew a tough field at the championships as the coach watched from the stands."}
+{"id":"i_00187","type":"classify","text":"A regional bank reported a share buyback worth billions"}
+{"id":"i_00188","type":"classify","text":"The chipmaker benchmarked an API for on-device inference under a permissive licence."}
+{"id":"i_00189","type":"classify","text":"The parliament evacuated a state of emergency after the floods drawing international criticism."}
+{"id":"i_00190","type":"classify","text":"The defending champions thrashed the host nation in the semi-final after a late goal."}
+{"id":"i_00191","type":"classify","text":"The private equity firm announced job losses across its branch network according to its annual report."}
+{"id":"i_00192","type":"classify","text":"The retailer benchmarked a vector search feature with support for Rust and Python."}
+{"id":"i_00193","type":"classify","text":"The marathon favourite drew a tough field at the championships despite a first-half red card."}
+{"id":"i_00194","type":"classify","text":"Rescue teams reported guidance below market expectations ahead of the earnings call."}
+{"id":"i_00195","type":"classify","text":"The chipmaker shipped a critical security fix for its kernel after months of testing."}
+{"id":"i_00196","type":"classify","text":"The foreign ministry negotiated the capital's curfew as diplomats gathered in Geneva."}
+{"id":"i_00197","type":"classify","text":"The tennis top seed launched a critical security fix for its kernel under a permissive licence.","golden":"tech"}
+{"id":"i_00198","type":"classify","text":"Rescue teams marched against a new constitution after the referendum in a televised address."}
+{"id":"i_00199","type":"classify","text":"The league leaders edged the visitors in extra time as the coach watched from the stands.","golden":"sports"}
+{"id":"i_00200","type":"classify","text":"The coalition government brokered a faster GPU for data centres as diplomats gathered in Geneva."}
+{"id":"i_00201","type":"classify","text":"The supermarket chain warned of a downgrade from analysts according to its annual report.","golden":"business"}
+{"id":"i_00202","type":"classify","text":"The airline raised a merger with its closest competitor according to its annual report."}
+{"id":"i_00203","type":"classify","text":"The smartphone maker deprecated a new large language model to developers this week."}
+{"id":"i_00204","type":"classify","text":"The marathon favourite stumbled against an injury-hit squad at home despite a first-half red card."}
+{"id":"i_00205","type":"classify","text":"The prime minister unveiled a faster GPU for data centres"}
+{"id":"i_00206","type":"classify","text":"The AI lab rolled out a faster GPU for data centres with support for Rust and Python."}
+{"id":"i_00207","type":"classify","text":"The tennis top seed clinched a state of emergency after the floods to go top of the table."}
+{"id":"i_00208","type":"classify","text":"The AI lab benchmarked a beta of its next operating system claiming a 2x speedup."}
+{"id":"i_00209","type":"classify","text":"The supermarket chain booked a merger with its closest competitor according to its annual report."}
+{"id":"i_00210","type":"classify","text":"A logistics company raised guidance below market expectations ahead of the earnings call."}
+{"id":"i_00211","type":"classify","text":"The marathon favourite stumbled against a weakened lineup on Saturday to go top of the table.","golden":"sports"}
+{"id":"i_00212","type":"classify","text":"The national team lost the tournament's dark horse in front of a sold-out stadium."}
+{"id":"i_00213","type":"classify","text":"The relegation-threatened club drew an injury-hit squad at home as the coach watched from the stands."}
+{"id":"i_00214","type":"classify","text":"The Olympic sprint squad clinched a peace deal after years of conflict as the coach watched from the stands."}
+{"id":"i_00215","type":"classify","text":"The national team won their rivals in the cup final"}
+{"id":"i_00216","type":"classify","text":"A regional bank cut a state of emergency after the floods as interest rates stayed high.","golden":"business"}
+{"id":"i_00217","type":"classify","text":"The coalition government evacuated aid corridors into the besieged city drawing international criticism.","golden":"world"}
+{"id":"i_00218","type":"classify","text":"The veteran goalkeeper edged the top seed in straight sets despite a first-half red card."}
+{"id":"i_00219","type":"classify","text":"The home side lost a tough field at the championships to go top of the table.","golden":"sports"}
+{"id":"i_00220","type":"classify","text":"The prime minister postponed the general election amid unrest after weeks of demonstrations."}
+{"id":"i_00221","type":"classify","text":"The relegation-threatened club stumbled against a weakened lineup on Saturday in front of a sold-out stadium.","golden":"sports"}
+{"id":"i_00222","type":"classify","text":"The robotics company benchmarked end-to-end encryption for group chats"}
+{"id":"i_00223","type":"classify","text":"The airline cut a merger with its closest competitor ahead of the earnings call."}
+{"id":"i_00224","type":"classify","text":"The election commission brokered aid corridors into the besieged city after weeks of demonstrations."}
+{"id":"i_00225","type":"classify","text":"The league leaders beat a stubborn defence in the second half to go top of the table."}
+{"id":"i_00226","type":"classify","text":"The robotics company open-sourced a new large language model"}
+{"id":"i_00227","type":"classify","text":"The border agency condemned sanctions on the neighbouring regime after weeks of demonstrations."}
+{"id":"i_00228","type":"classify","text":"Rescue teams negotiated a state of emergency after the floods drawing international criticism."}
+{"id":"i_00229","type":"classify","text":"The Olympic sprint squad declared a peace deal after years of conflict as diplomats gathered in Geneva."}
+{"id":"i_00230","type":"classify","text":"The chipmaker patched a vector search feature to developers this week.","golden":"tech"}
+{"id":"i_00231","type":"classify","text":"The energy group reported a merger with its closest competitor according to its annual report.","golden":"business"}
+{"id":"i_00232","type":"classify","text":"The supermarket chain reported guidance below market expectations citing supply chain costs."}
+{"id":"i_00233","type":"classify","text":"The parliament condemned end-to-end encryption for group chats drawing international criticism."}
+{"id":"i_00234","type":"classify","text":"The prime minister postponed talks with the opposition leader drawing international criticism.","golden":"world"}
+{"id":"i_00235","type":"classify","text":"The home side drew an injury-hit squad at home in front of a sold-out stadium."}
+{"id":"i_00236","type":"classify","text":"The relegation-threatened club brokered sanctions on the neighbouring regime in a televised address."}
+{"id":"i_00237","type":"classify","text":"The UN envoy condemned a state of emergency after the floods according to state media."}
+{"id":"i_00238","type":"classify","text":"The parliament benchmarked end-to-end encryption for group chats"}
+{"id":"i_00239","type":"classify","text":"The prime minister reopened a faster GPU for data centres after weeks of demonstrations."}
+{"id":"i_00240","type":"classify","text":"The relegation-threatened club clinched their rivals in the cup final to go top of the table.","golden":"sports"}
+{"id":"i_00241","type":"classify","text":"A startup patched end-to-end encryption for group chats with support for Rust and Python."}
+{"id":"i_00242","type":"classify","text":"A regional bank posted a faster GPU for data centres as interest rates stayed high."}
+{"id":"i_00243","type":"classify","text":"The carmaker booked job losses across its branch network citing supply chain costs."}
+{"id":"i_00244","type":"classify","text":"The AI lab unveiled a critical security fix for its kernel after months of testing."}
+{"id":"i_00245","type":"classify","text":"The chipmaker unveiled a smaller transformer for edge devices under a permissive licence."}
+{"id":"i_00246","type":"classify","text":"A rookie striker beat a peace deal after years of conflict to go top of the table."}
+{"id":"i_00247","type":"classify","text":"The national team lost the host nation in the semi-final"}
+{"id":"i_00248","type":"classify","text":"The robotics company released a beta of its next operating system"}
+{"id":"i_00249","type":"classify","text":"The veteran goalkeeper won a ceasefire along the disputed border"}
+{"id":"i_00250","type":"classify","text":"A logistics company rewrote a beta of its next operating system"}
+{"id":"i_00251","type":"classify","text":"The Olympic sprint squad thrashed an injury-hit squad at home to go top of the table."}
+{"id":"i_00252","type":"classify","text":"The carmaker warned of a merger with its closest competitor as interest rates stayed high."}
+{"id":"i_00253","type":"classify","text":"The prime minister condemned a ceasefire along the disputed border drawing international criticism."}
+{"id":"i_00254","type":"classify","text":"The supermarket chain shipped a faster GPU for data centres under a permissive licence.","golden":"tech"}
+{"id":"i_00255","type":"classify","text":"The tennis top seed won a vector search feature as the coach watched from the stands."}
+{"id":"i_00256","type":"classify","text":"The AI lab open-sourced end-to-end encryption for group chats claiming a 2x speedup."}
+{"id":"i_00257","type":"classify","text":"The airline projected a drop in consumer demand ahead of the earnings call."}
+{"id":"i_00258","type":"classify","text":"The AI lab shipped a compiler for its custom silicon after months of testing."}
+{"id":"i_00259","type":"classify","text":"The retailer raised a merger with its closest competitor as interest rates stayed high."}
+{"id":"i_00260","type":"classify","text":"The smartphone maker released the capital's curfew to developers this week.","golden":"tech"}
+{"id":"i_00261","type":"classify","text":"The airline projected a dividend increase for shareholders as interest rates stayed high."}
+{"id":"i_00262","type":"classify","text":"A rookie striker rallied past a weakened lineup on Saturday to go top of the table.","golden":"sports"}
+{"id":"i_00263","type":"classify","text":"The database vendor released sanctions on the neighbouring regime"}
+{"id":"i_00264","type":"classify","text":"The smartphone maker released a new large language model under a permissive licence."}
+{"id":"i_00265","type":"classify","text":"The AI lab patched a new large language model after months of testing."}
+{"id":"i_00266","type":"classify","text":"The robotics company benchmarked a low-latency streaming protocol with support for Rust and Python."}
+{"id":"i_00267","type":"classify","text":"The carmaker raised a share buyback worth billions sending its stock lower."}
+{"id":"i_00268","type":"classify","text":"The browser team benchmarked a beta of its next operating system to developers this week."}
+{"id":"i_00269","type":"classify","text":"The election commission reopened a tough field at the championships drawing international criticism."}
+{"id":"i_00270","type":"classify","text":"A regional bank disclosed a drop in consumer demand sending its stock lower."}
+{"id":"i_00271","type":"classify","text":"The retailer condemned the general election amid unrest according to state media.","golden":"world"}
+{"id":"i_00272","type":"classify","text":"The tennis top seed stumbled against end-to-end encryption for group chats after a late goal."}
+{"id":"i_00273","type":"classify","text":"The league leaders rallied past a stubborn defence in the second half after a late goal."}
+{"id":"i_00274","type":"classify","text":"A startup unveiled an API for on-device inference with support for Rust and Python."}
+{"id":"i_00275","type":"classify","text":"The relegation-threatened club beat the tournament's dark horse despite a first-half red card."}
+{"id":"i_00276","type":"classify","text":"The foreign ministry unveiled an API for on-device inference to developers this week.","golden":"tech"}
+{"id":"i_00277","type":"classify","text":"The border agency postponed a ceasefire along the disputed border as diplomats gathered in Geneva.","golden":"world"}
+{"id":"i_00278","type":"classify","text":"The airline cut a surprise quarterly profit citing supply chain costs.","golden":"business"}
+{"id":"i_00279","type":"classify","text":"The relegation-threatened club won a weakened lineup on Saturday in front of a sold-out stadium."}
+{"id":"i_00280","type":"classify","text":"A logistics company projected a merger with its closest competitor as interest rates stayed high."}
+{"id":"i_00281","type":"classify","text":"The chipmaker open-sourced a compiler for its custom silicon to developers this week."}
+{"id":"i_00282","type":"classify","text":"The energy group postponed aid corridors into the besieged city as diplomats gathered in Geneva.","golden":"world"}
+{"id":"i_00283","type":"classify","text":"The UN envoy declared a peace deal after years of conflict drawing international criticism."}
+{"id":"i_00284","type":"classify","text":"The AI lab approved a new constitution after the referendum"}
+{"id":"i_00285","type":"classify","text":"The veteran goalkeeper beat a weakened lineup on Saturday","golden":"sports"}
+{"id":"i_00286","type":"classify","text":"The relegation-threatened club won the tournament's dark horse to go top of the table."}
+{"id":"i_00287","type":"classify","text":"The parliament thrashed a weakened lineup on Saturday to go top of the table.","golden":"sports"}
+{"id":"i_00288","type":"classify","text":"The home side drew a share buyback worth billions"}
+{"id":"i_00289","type":"classify","text":"A regional bank warned of a drop in consumer demand as interest rates stayed high."}
+{"id":"i_00290","type":"classify","text":"The open-source project shipped an API for on-device inference under a permissive licence."}
+{"id":"i_00291","type":"classify","text":"The marathon favourite edged the host nation in the semi-final in front of a sold-out stadium."}
+{"id":"i_00292","type":"classify","text":"The insurer posted a peace deal after years of conflict according to its annual report."}
+{"id":"i_00293","type":"classify","text":"The browser team rewrote a beta of its next operating system"}
+{"id":"i_00294","type":"classify","text":"The airline forecast guidance below market expectations according to its annual report."}
+{"id":"i_00295","type":"classify","text":"The border agency declared sanctions on the neighbouring regime"}
+{"id":"i_00296","type":"classify","text":"The database vendor open-sourced a faster GPU for data centres claiming a 2x speedup."}
+{"id":"i_00297","type":"classify","text":"The prime minister condemned a new constitution after the referendum in a televised address.","golden":"world"}
+{"id":"i_00298","type":"classify","text":"The prime minister reopened sanctions on the neighbouring regime as diplomats gathered in Geneva."}
+{"id":"i_00299","type":"classify","text":"The browser team patched an API for on-device inference after months of testing."}
+{"id":"i_00300","type":"classify","text":"The coalition government evacuated sanctions on the neighbouring regime"}

@@ -3,8 +3,14 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "scripts": { "start": "tsx src/server.ts", "build": "tsc -b", "test": "vitest run" },
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "demo": "tsx src/agent-demo.ts",
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
   "dependencies": {
+    "@d402/client": "workspace:*",
     "@d402/server": "workspace:*",
     "@d402/spec": "workspace:*",
     "@hono/node-server": "^2.1.0",
