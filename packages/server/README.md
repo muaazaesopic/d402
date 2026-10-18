@@ -97,3 +97,36 @@ d402-tasks stats <db>               # pool statistics as JSON
 ```
 
 Task file lines follow SPEC 10: `{"id":"i_1","type":"classify","text":"...","golden":"tech"}`.
+
+## Admin endpoints
+
+Set `adminToken` and four read-only routes are mounted next to the task routes. Every
+request must carry `Authorization: Bearer <adminToken>`; anything else is
+`401 { "error": "unauthorized" }`. Without `adminToken` the routes do not exist (404).
+
+```ts
+const d402 = createD402({ ...opts, adminToken: process.env.D402_ADMIN_TOKEN });
+```
+
+| Route | Body |
+|---|---|
+| `GET /.well-known/d402/admin/stats` | `{ stats: tasks.stats(), agents: agents.list(), resolvedCount, now }` |
+| `GET /.well-known/d402/admin/export` | `tasks.exportResolved()` as JSONL (`application/x-ndjson`), one `{ id, text, answer, weight, voters }` per line |
+| `GET /.well-known/d402/admin/agents` | `agents.list()` |
+| `GET /.well-known/d402/admin/events?since=<unix>` | `{ events, now }`: the last 200 events at or after `since`, oldest first |
+
+An event is `{ t, type, key?, bundleId?, itemId?, tier?, jti?, calls?, answer?, voters? }` with
+`type` one of `bundle_issued`, `bundle_passed`, `bundle_failed`, `voucher_issued`,
+`item_resolved`, `agent_blocked`.
+
+Limitation: there is no event log. Events are reconstructed from the store on every
+request (bundles' `issued_at`/`submitted_at`, vouchers, votes, resolved items, blocked
+agents), which keeps the grading path untouched but means:
+
+- voucher *spends* are not visible as events (`stats.vouchers` and `vouchers.get(jti)` are);
+- a resolved item is dated by the latest bundle that voted for the winning answer;
+- a blocked agent is dated by its last submission;
+- only `SqliteStore` supports the table-backed events; another `Store` yields `agent_blocked` only.
+
+`curl -s -H "Authorization: Bearer $TOKEN" http://localhost:8787/.well-known/d402/admin/export > resolved.jsonl`
+is the quickest way to pull labelled data out of a running seller.

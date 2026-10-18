@@ -1,0 +1,14 @@
+{
+  "name": "d402-uc-x402-side-by-side",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": { "start": "tsx src/main.ts", "test": "vitest run" },
+  "dependencies": {
+    "@d402/client": "workspace:*",
+    "@d402/server": "workspace:*",
+    "@d402/spec": "workspace:*",
+    "@hono/node-server": "^2.1.0",
+    "hono": "^4.13.0"
+  }
+}

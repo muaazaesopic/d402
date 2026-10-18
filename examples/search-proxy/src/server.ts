@@ -2,6 +2,8 @@
  * Example seller: a tiny search API gated by d402.
  *
  *   GET /health               open
+ *   GET /dashboard            open: live seller dashboard (needs ?token=<adminToken> on first load)
+ *   GET /.well-known/d402/admin/{stats,export,agents,events}   Authorization: Bearer <adminToken>
  *   GET /search?q=...         gated: needs a D402-Voucher (earn one by labelling)
  *   GET /.well-known/d402     the offer (same body as the 402)
  *   GET /.well-known/d402/tasks?tier=s|m|l   get a bundle
@@ -16,6 +18,7 @@ import { serve } from "@hono/node-server";
 import { createD402, type D402Server } from "@d402/server";
 import type { Tier } from "@d402/spec";
 import { LABELS, search } from "./corpus.js";
+import { dashboardHtml } from "./dashboard.js";
 
 /** Tiers from SPEC section 3. */
 export const TIERS: Tier[] = [
@@ -26,6 +29,8 @@ export const TIERS: Tier[] = [
 
 export const DEFAULT_PORT = 8787;
 const DEV_SECRET = "dev-secret-do-not-use-in-production";
+const DEMO_ADMIN_TOKEN = "demo";
+export const SELLER_ID = "d402-example-search-proxy";
 
 /** The classify task file that ships with the example (300 items, 20% golden). */
 export const TASKS_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "tasks.jsonl");
@@ -44,6 +49,8 @@ export interface AppOptions {
   /** Task file to load at boot; default ./tasks.jsonl next to the example. */
   tasksPath?: string;
   requireModelFamilies?: boolean;
+  /** Bearer token for /.well-known/d402/admin/* and the dashboard; default env D402_ADMIN_TOKEN or "demo" (with a warning). */
+  adminToken?: string;
 }
 
 export function createApp(opts: AppOptions = {}): { app: Hono; d402: D402Server; port: number } {
@@ -54,9 +61,14 @@ export function createApp(opts: AppOptions = {}): { app: Hono; d402: D402Server;
     console.warn("[search-proxy] D402_SECRET is not set; using an insecure dev default. Set D402_SECRET in production.");
     secret = DEV_SECRET;
   }
+  let adminToken = opts.adminToken ?? process.env.D402_ADMIN_TOKEN;
+  if (!adminToken) {
+    console.warn(`[search-proxy] D402_ADMIN_TOKEN is not set; admin endpoints and /dashboard use the token "${DEMO_ADMIN_TOKEN}". Set D402_ADMIN_TOKEN in production.`);
+    adminToken = DEMO_ADMIN_TOKEN;
+  }
 
   const d402 = createD402({
-    sellerId: "d402-example-search-proxy",
+    sellerId: SELLER_ID,
     taskUrl: `${baseUrl}/.well-known/d402/tasks`,
     scope: ["/search"],
     tiers: TIERS,
@@ -66,11 +78,13 @@ export function createApp(opts: AppOptions = {}): { app: Hono; d402: D402Server;
     db: opts.db,
     now: opts.now,
     requireModelFamilies: opts.requireModelFamilies,
+    adminToken,
   });
   d402.tasks.loadFile(opts.tasksPath ?? TASKS_PATH);
 
   const app = new Hono();
   app.get("/health", (c) => c.json({ ok: true, ...d402.tasks.stats() }));
+  app.get("/dashboard", (c) => c.html(dashboardHtml(SELLER_ID)));
   app.route("/", d402.routes);
   app.use("/search", d402.gate);
   app.get("/search", (c) => {
@@ -98,5 +112,6 @@ if (isMain) {
     console.log(`  pool: ${stats.total} items (${stats.golden} golden)`);
     console.log(`  offer: curl -s http://localhost:${info.port}/.well-known/d402`);
     console.log(`  gated: curl -i "http://localhost:${info.port}/search?q=ceasefire"`);
+    console.log(`  dashboard: open http://localhost:${info.port}/dashboard?token=<D402_ADMIN_TOKEN>`);
   });
 }

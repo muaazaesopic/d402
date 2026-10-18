@@ -19,7 +19,7 @@ function goldenLookup(): Record<string, string> {
 }
 
 describe("search-proxy example", () => {
-  const { app, d402 } = createApp({ secret: "test-secret" });
+  const { app, d402 } = createApp({ secret: "test-secret", adminToken: "test-admin" });
   const fetchViaApp: typeof fetch = (input, init) => app.request(input as string | Request, init);
   afterAll(() => d402.close());
 
@@ -114,6 +114,51 @@ describe("search-proxy example", () => {
     const bundle = await client.getBundle(accept.taskUrl, "s");
     const answers = Object.fromEntries(bundle.items.map((i) => [i.id, wrong(goldens[i.id] ?? "world")]));
     await expect(client.submit(accept.taskUrl, bundle, answers, accept)).rejects.toMatchObject({ code: "quality", status: 422 });
+  });
+
+  it("GET /dashboard serves the self-contained HTML page with the token logic", async () => {
+    const res = await app.request("/dashboard");
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type")).toMatch(/^text\/html/);
+    const html = await res.text();
+    expect(html).toContain("<!doctype html>");
+    expect(html).toContain("d402 seller dashboard");
+    expect(html).toContain("d402-example-search-proxy");
+    // token from ?token=, parked in sessionStorage, scrubbed from the URL
+    expect(html).toContain('params.get("token")');
+    expect(html).toContain("sessionStorage.setItem");
+    expect(html).toContain("history.replaceState");
+    expect(html).toContain('"Bearer " + token');
+    expect(html).toContain("/.well-known/d402/admin/stats");
+    expect(html).toContain("/.well-known/d402/admin/events");
+    // self-contained: no external scripts or stylesheets
+    expect(html).not.toMatch(/<script[^>]+src=/);
+    expect(html).not.toMatch(/<link[^>]+stylesheet/);
+    expect(html).toContain('id="c-resolved"');
+    // it is not gated
+    expect(html).not.toContain('"d402":"1"');
+  });
+
+  it("admin stats need the bearer token: 401 without, 200 with", async () => {
+    const none = await app.request("/.well-known/d402/admin/stats");
+    expect(none.status).toBe(401);
+    expect(await none.json()).toEqual({ error: "unauthorized" });
+    const wrong = await app.request("/.well-known/d402/admin/stats", { headers: { authorization: "Bearer demo" } });
+    expect(wrong.status).toBe(401);
+  });
+
+  it("admin stats and events respond with the configured token", async () => {
+    const res = await app.request("/.well-known/d402/admin/stats", { headers: { authorization: "Bearer test-admin" } });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { stats: { total: number }; agents: unknown[]; resolvedCount: number; now: number };
+    expect(body.stats.total).toBe(300);
+    expect(Array.isArray(body.agents)).toBe(true);
+    expect(body.resolvedCount).toBe(0);
+    expect(typeof body.now).toBe("number");
+    const ev = await app.request("/.well-known/d402/admin/events", { headers: { authorization: "Bearer test-admin" } });
+    expect(ev.status).toBe(200);
+    const events = ((await ev.json()) as { events: { type: string }[] }).events;
+    expect(events.some((e) => e.type === "bundle_issued")).toBe(true);
   });
 
   it("search is case-insensitive and empty for unknown terms", () => {

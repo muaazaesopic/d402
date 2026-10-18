@@ -129,6 +129,10 @@ export interface Store {
   /** Atomic decrement. Returns calls left after the spend, or undefined if none were left. */
   spendVoucher(jti: string): number | undefined;
 
+  /** Records (jti, nonce). Returns false when the pair was already seen (replay). */
+  recordSpendNonce(jti: string, nonce: string, expiresAt: number): boolean;
+  purgeSpendNonces(now: number): void;
+
   transaction<T>(fn: () => T): T;
   close(): void;
 }
@@ -193,6 +197,13 @@ CREATE TABLE IF NOT EXISTS vouchers (
   exp        INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS vouchers_sub ON vouchers (sub);
+CREATE TABLE IF NOT EXISTS spend_nonces (
+  jti        TEXT NOT NULL,
+  nonce      TEXT NOT NULL,
+  expires_at INTEGER NOT NULL,
+  PRIMARY KEY (jti, nonce)
+);
+CREATE INDEX IF NOT EXISTS spend_nonces_exp ON spend_nonces (expires_at);
 `;
 
 type Row = Record<string, unknown>;
@@ -490,6 +501,17 @@ export class SqliteStore implements Store {
       this.db.exec("ROLLBACK");
       throw e;
     }
+  }
+
+  recordSpendNonce(jti: string, nonce: string, expiresAt: number): boolean {
+    const r = this.db
+      .prepare("INSERT OR IGNORE INTO spend_nonces (jti, nonce, expires_at) VALUES (?, ?, ?)")
+      .run(jti, nonce, expiresAt);
+    return Number(r.changes) === 1;
+  }
+
+  purgeSpendNonces(now: number): void {
+    this.db.prepare("DELETE FROM spend_nonces WHERE expires_at <= ?").run(now);
   }
 
   close(): void {

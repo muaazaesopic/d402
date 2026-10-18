@@ -7,6 +7,7 @@ export const HEADERS = {
   model: "D402-Model",
   timestamp: "D402-Timestamp",
   sig: "D402-Sig",
+  nonce: "D402-Nonce",
   callsRemaining: "D402-Calls-Remaining",
 } as const;
 
@@ -32,6 +33,7 @@ export const ERROR_CODES = [
   "voucher_exhausted",
   "scope_mismatch",
   "stale_timestamp",
+  "replayed_spend",
   "missing_voucher",
   "bad_request",
 ] as const;

@@ -1,7 +1,7 @@
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import type { Bundle } from "@d402/spec";
 import { createCommandSolver } from "./solver-cmd.js";
 
@@ -18,8 +18,14 @@ const bundle: Bundle = {
   expiresAt: 0,
 };
 
+const tempDirs: string[] = [];
+afterAll(() => {
+  for (const d of tempDirs) rmSync(d, { recursive: true, force: true });
+});
+
 function script(body: string): string {
   const dir = mkdtempSync(join(tmpdir(), "d402-solver-"));
+  tempDirs.push(dir);
   const p = join(dir, "solver.cjs");
   writeFileSync(p, body);
   return `node ${JSON.stringify(p)}`;

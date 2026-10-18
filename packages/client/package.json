@@ -6,6 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "bin": { "d402": "./dist/cli.js" },
   "files": ["dist"],
   "scripts": { "build": "tsc -b", "test": "vitest run" },
   "dependencies": {

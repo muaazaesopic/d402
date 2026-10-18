@@ -6,6 +6,7 @@ import {
   findD402Accept,
   generateKeypair,
   isValidPublicKey,
+  newNonce,
   signSpend,
   signSubmit,
   verifySpend,
@@ -37,6 +38,19 @@ describe("keys and signatures", () => {
     expect(isValidPublicKey("")).toBe(false);
     expect(isValidPublicKey("abc")).toBe(false);
     expect(isValidPublicKey(Buffer.alloc(31).toString("base64url"))).toBe(false);
+  });
+
+  it("round-trips a spend signature with a nonce and keeps the 5-line form without one", () => {
+    const kp = generateKeypair();
+    const n = newNonce();
+    expect(n).toHaveLength(22);
+    const sig = signSpend(kp.privateKey, "GET", "/search", "v_1", 1700000000, n);
+    expect(verifySpend(kp.publicKey, "GET", "/search", "v_1", 1700000000, sig, n)).toBe(true);
+    expect(verifySpend(kp.publicKey, "GET", "/search", "v_1", 1700000000, sig)).toBe(false);
+    expect(verifySpend(kp.publicKey, "GET", "/search", "v_1", 1700000000, sig, newNonce())).toBe(false);
+    const plain = signSpend(kp.privateKey, "GET", "/search", "v_1", 1700000000);
+    expect(verifySpend(kp.publicKey, "GET", "/search", "v_1", 1700000000, plain)).toBe(true);
+    expect(verifySpend(kp.publicKey, "GET", "/search", "v_1", 1700000000, plain, n)).toBe(false);
   });
 
   it("round-trips a spend signature", () => {

@@ -5,7 +5,15 @@
     { "path": "packages/server" },
     { "path": "packages/client" },
     { "path": "packages/mcp" },
+    { "path": "packages/proxy" },
     { "path": "examples/search-proxy" },
-    { "path": "bench" }
+    { "path": "bench" },
+    { "path": "use-cases/01-dataset-builder" },
+    { "path": "use-cases/02-x402-side-by-side" },
+    { "path": "use-cases/03-rate-limit-upgrade" },
+    { "path": "use-cases/04-mcp-agent" },
+    { "path": "use-cases/05-multi-seller-wallet" },
+    { "path": "use-cases/06-trust-tiers" },
+    { "path": "use-cases/07-paid-crawl" }
   ]
 }

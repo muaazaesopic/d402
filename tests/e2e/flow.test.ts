@@ -357,17 +357,18 @@ describe("scope", () => {
     const res = await agent.fetch(`${s.baseUrl}/other`);
     expect(res.status).toBe(402);
     const body = (await res.json()) as { error: string; accepts: unknown[] };
-    expect(body.error).toBe("scope_mismatch");
+    // The client never attaches the /search voucher to /other (scope mismatch on
+    // its side), and the offer's scope says /other is not purchasable, so it hands
+    // the seller's bare 402 back without earning.
+    expect(body.error).toBe("missing_voucher");
     expect(findD402Accept(body as never)).toBeDefined();
 
     // the /search voucher was not touched
     expect(s.d402.vouchers.get(jti)?.callsLeft).toBe(9);
     const after = await agent.fetch(`${s.baseUrl}/search?q=y`);
     expect(after.status).toBe(200);
-    // NOTE: the client earned a second voucher while trying to pay for /other,
-    // even though the accept's scope already said /other is not purchasable.
-    // That is wasteful but bounded (no loop); a client could skip the earn.
-    expect(s.d402.agents.get(agent.keypair.publicKey)!.bundles).toBeLessThanOrEqual(2);
+    // exactly one bundle was ever earned: none was wasted on /other
+    expect(s.d402.agents.get(agent.keypair.publicKey)!.bundles).toBe(1);
   });
 
   it("a hand-made spend on /other with a valid /search voucher is scope_mismatch", async () => {

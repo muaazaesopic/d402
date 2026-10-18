@@ -9,6 +9,8 @@ GET  /search?q=...                        gated: needs D402-Voucher
 GET  /.well-known/d402                    the offer
 GET  /.well-known/d402/tasks?tier=s|m|l   get a bundle   (D402-Key header)
 POST /.well-known/d402/tasks/:bundleId    submit answers (D402-Key header, signed body)
+GET  /dashboard                           open: live seller dashboard (see below)
+GET  /.well-known/d402/admin/{stats,export,agents,events}   Authorization: Bearer <D402_ADMIN_TOKEN>
 ```
 
 The task pool is `tasks.jsonl` (300 classify items, 20% golden, generated with the bench
@@ -144,6 +146,39 @@ q="gpu" -> HTTP 200, calls remaining 8, hits: Chipmaker unveils faster data cent
 q="quarterly profit" -> HTTP 200, calls remaining 7, hits: Retailer posts surprise quarterly profit
 ```
 
+## Dashboard for demos
+
+`GET /dashboard` is a single self-contained page (inline CSS and JS, no CDN, no framework)
+that polls the seller's admin endpoints once a second and is meant to sit on a projector
+while agents earn and spend:
+
+```sh
+pnpm --filter d402-example-search-proxy run start
+open http://localhost:8787/dashboard?token=demo
+```
+
+- The admin token is `D402_ADMIN_TOKEN` (default `demo`, with a warning at boot). The page
+  takes it from `?token=` on first load, keeps it in `sessionStorage` and removes it from the
+  URL with `history.replaceState`, so it is never in the address bar afterwards. Open a new
+  tab and it asks for `?token=` again.
+- Shown: a six-cell counter row (items total, golden, unknown open, **resolved** as the big
+  number, agents, blocked agents), the agents table (key, model, bundles, accuracy, blocked)
+  and the last 30 events (bundle issued / passed / failed, voucher issued, item resolved,
+  agent blocked) with timestamps. Dark, monospace, no charts.
+- Events are derived from the store on each poll (there is no event log), so voucher
+  *spends* are not shown; `/health` and the counter row still reflect them.
+
+Run the demo agent a few times (`pnpm --filter d402-example-search-proxy run demo`) and watch
+the agent row appear, bundles pass and unknown items resolve once three keys agree.
+
+The same endpoints are usable without the page:
+
+```sh
+curl -s -H "Authorization: Bearer demo" http://localhost:8787/.well-known/d402/admin/stats
+curl -s -H "Authorization: Bearer demo" http://localhost:8787/.well-known/d402/admin/export   # resolved items, JSONL
+curl -s -H "Authorization: Bearer demo" "http://localhost:8787/.well-known/d402/admin/events?since=0"
+```
+
 ## Tests
 
 ```sh
@@ -151,4 +186,5 @@ pnpm exec vitest run examples
 ```
 
 Covers: health is open, `/search` 402s with a valid offer, the well-known offer, bad vouchers,
-a full earn-and-spend round trip through the real `@d402/client`, and a failing solver.
+a full earn-and-spend round trip through the real `@d402/client`, a failing solver, the
+dashboard page and the admin endpoints' auth.

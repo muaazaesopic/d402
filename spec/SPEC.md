@@ -29,6 +29,7 @@ The model is reCAPTCHA for agents:
 | `D402-Model` | agent -> seller | optional model family string, e.g. `claude`, `gpt`, `gemini`, `llama`. Used for the diversity rule. |
 | `D402-Timestamp` | agent -> seller | unix seconds. Required only when the seller binds spend to the key. |
 | `D402-Sig` | agent -> seller | base64url Ed25519 signature. Required only when the seller binds spend to the key. |
+| `D402-Nonce` | agent -> seller | 16 random bytes, base64url. Recommended on bound spends; see 7.2. |
 | `D402-Calls-Remaining` | seller -> agent | integer, on every successful spend. |
 
 ## 3. Discovery and the 402 offer
@@ -212,6 +213,22 @@ When the seller sets `bindVouchers: true`, spend requests must also carry
 Timestamps older than 300 seconds are rejected (`stale_timestamp`). A leaked voucher
 is then useless without the private key.
 
+### 7.2 Spend nonce (recommended with bound spending)
+
+Section 7.1 alone lets a captured bound spend be replayed for up to 300 seconds,
+burning a call each time. To close that, the agent sends `D402-Nonce` (16 random
+bytes, base64url) and appends it as a 6th line of the signed message:
+
+```
+"d402:spend\n" + method + "\n" + path + "\n" + jti + "\n" + timestamp + "\n" + nonce
+```
+
+The seller verifies with the nonce when the header is present and remembers
+`(jti, nonce)` until the timestamp leaves the skew window. A repeated pair is
+rejected with `replayed_spend`. Sellers may set `requireSpendNonce` to reject
+bound spends that carry no nonce; by default the 5-line form is still accepted
+so older clients keep working.
+
 ## 8. Task types
 
 v1 defines `classify`:
@@ -242,6 +259,7 @@ JSONL, one item per line:
 
 - Per-item results are never revealed.
 - Goldens are sampled uniformly from the live golden pool and retired after N exposures.
-- Vouchers are bearer tokens unless `bindVouchers` is on. Sellers that care should turn it on.
+- Vouchers are bearer tokens unless `bindVouchers` is on. Sellers that care should turn it on,
+  and set `requireSpendNonce` so a captured spend cannot be replayed inside the skew window.
 - Key and IP rate limits are the only Sybil defence in v1. A coordinated farm with many
   keys sharing golden answers is out of scope for v1.

@@ -35,8 +35,10 @@ import {
 } from "./store.js";
 import { accuracy, goldenCount, isBlocked, passes } from "./trust.js";
 import * as pool from "./pool.js";
+import { createAdminRoutes } from "./admin.js";
 
 export * from "./store.js";
+export * from "./admin.js";
 export * from "./trust.js";
 export type { PoolStats, ResolvedItem };
 
@@ -67,12 +69,16 @@ export interface D402ServerOptions {
   requireModelFamilies?: boolean;
   /** SPEC 7.1: bind spends to the agent key. Default false. */
   bindVouchers?: boolean;
+  /** With bindVouchers: reject bound spends that carry no D402-Nonce (SPEC 7.2). Default false. */
+  requireSpendNonce?: boolean;
   /** Unix seconds; injectable for tests. */
   now?: () => number;
   /** RNG in [0, 1) used for golden sampling and shuffling. */
   random?: () => number;
   /** Extra schemes appended to offer.accepts (e.g. an x402 "exact" entry). */
   otherAccepts?: unknown[];
+  /** When set, mounts GET /.well-known/d402/admin/{stats,export,agents,events} behind `Authorization: Bearer <adminToken>`. */
+  adminToken?: string;
 }
 
 export interface AgentRecord {
@@ -206,6 +212,8 @@ export function createD402(opts: D402ServerOptions): D402Server {
   const maxOpenBundlesPerKey = opts.maxOpenBundlesPerKey ?? DEFAULTS.maxOpenBundlesPerKey;
   const requireModelFamilies = opts.requireModelFamilies ?? false;
   const bindVouchers = opts.bindVouchers ?? false;
+  const requireSpendNonce = opts.requireSpendNonce ?? false;
+  let lastNoncePurge = 0;
   const instructions = opts.instructions ?? DEFAULT_INSTRUCTIONS;
   const labels = opts.labels.slice();
   const labelSet = new Set(labels);
@@ -556,8 +564,24 @@ export function createD402(opts: D402ServerOptions): D402Server {
         return fail("stale_timestamp", `${HEADERS.timestamp} is missing or outside the allowed skew`);
       }
       const sig = c.req.header(HEADERS.sig);
-      if (!sig || !verifySpend(key, c.req.method, path, claims.jti, ts, sig)) {
+      const nonce = c.req.header(HEADERS.nonce);
+      if (nonce === undefined && requireSpendNonce) {
+        return fail("bad_signature", `${HEADERS.nonce} is required by this seller`);
+      }
+      if (nonce !== undefined && (nonce.length < 8 || nonce.length > 128)) {
+        return fail("bad_signature", `${HEADERS.nonce} must be 8 to 128 characters`);
+      }
+      if (!sig || !verifySpend(key, c.req.method, path, claims.jti, ts, sig, nonce)) {
         return fail("bad_signature", `${HEADERS.sig} does not verify`);
+      }
+      if (nonce !== undefined) {
+        if (t - lastNoncePurge >= 60) {
+          store.purgeSpendNonces(t);
+          lastNoncePurge = t;
+        }
+        if (!store.recordSpendNonce(claims.jti, nonce, ts + DEFAULTS.spendTimestampSkew + 1)) {
+          return fail("replayed_spend", `${HEADERS.nonce} was already used for this voucher`);
+        }
       }
     }
 
@@ -569,6 +593,8 @@ export function createD402(opts: D402ServerOptions): D402Server {
     c.header(HEADERS.callsRemaining, String(remaining));
     await next();
   };
+
+  if (opts.adminToken) routes.route("/", createAdminRoutes({ token: opts.adminToken, store, now, voucherTtl, stats: () => pool.stats(store, now()), exportResolved: () => pool.exportResolved(store), listAgents: () => store.listAgents().map(toAgentRecord) }));
 
   // -- public surface -------------------------------------------------------
 

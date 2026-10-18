@@ -1,0 +1,21 @@
+{
+  "name": "@d402/proxy",
+  "version": "0.1.0",
+  "description": "d402-proxy: put a d402 gate in front of any existing HTTP API with one command",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "bin": { "d402-proxy": "./dist/cli.js" },
+  "files": ["dist"],
+  "scripts": { "build": "tsc -b", "test": "vitest run", "start": "tsx src/cli.ts" },
+  "dependencies": {
+    "@d402/server": "workspace:*",
+    "@d402/spec": "workspace:*",
+    "@hono/node-server": "^2.1.0",
+    "hono": "^4.13.0"
+  },
+  "devDependencies": {
+    "@d402/client": "workspace:*"
+  }
+}

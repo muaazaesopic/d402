@@ -10,10 +10,11 @@ export default defineConfig({
       "@d402/server": r("./packages/server/src/index.ts"),
       "@d402/client": r("./packages/client/src/index.ts"),
       "@d402/mcp": r("./packages/mcp/src/index.ts"),
+      "@d402/proxy": r("./packages/proxy/src/index.ts"),
     },
   },
   test: {
-    include: ["packages/**/*.test.ts", "tests/**/*.test.ts", "examples/**/*.test.ts", "bench/**/*.test.ts"],
+    include: ["packages/**/*.test.ts", "tests/**/*.test.ts", "examples/**/*.test.ts", "bench/**/*.test.ts", "use-cases/**/*.test.ts"],
     testTimeout: 30_000,
     hookTimeout: 30_000,
     pool: "forks",

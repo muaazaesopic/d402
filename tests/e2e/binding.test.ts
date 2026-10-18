@@ -2,7 +2,7 @@
  * SPEC 7.1 bound spending (bindVouchers: true) over the real stack.
  */
 import { afterEach, describe, expect, it } from "vitest";
-import { DEFAULTS, HEADERS, findD402Accept, generateKeypair, signSpend } from "@d402/spec";
+import { DEFAULTS, HEADERS, findD402Accept, generateKeypair, newNonce, signSpend } from "@d402/spec";
 import { newAgent, perfectSolver, rawSpend, startSeller, type Seller } from "./helpers.js";
 
 const sellers: Seller[] = [];
@@ -163,11 +163,38 @@ describe("bindVouchers: hand-made spends", () => {
     expect((await rawSpend(s, v.token, "/search?q=two&page=2", h)).status).toBe(200);
   });
 
-  it("replaying the exact same signed headers within the skew SUCCEEDS (v1 has no nonce)", async () => {
-    // NOTE: SPEC 7.1 binds a spend to (method, path, jti, timestamp) only. A
-    // captured request can be replayed for up to spendTimestampSkew seconds
-    // and each replay burns a call. A per-jti nonce (or rejecting a timestamp
-    // the server has already seen for that jti) would close this.
+  it("a nonce-signed spend (SPEC 7.2) cannot be replayed, and the client always sends one", async () => {
+    const s = await seller();
+    const { kp, v } = await earned(s);
+    const nonce = newNonce();
+    const h = { ...signedHeaders(kp, v.jti, s.clock.t), [HEADERS.nonce]: nonce };
+    h[HEADERS.sig] = signSpend(kp.privateKey, "GET", "/search", v.jti, s.clock.t, nonce);
+    const first = await rawSpend(s, v.token, "/search?q=x", h);
+    expect(first.status).toBe(200);
+    const replay = await rawSpend(s, v.token, "/search?q=x", h);
+    expect(replay.status).toBe(402);
+    expect(replay.body.error).toBe("replayed_spend");
+    expect(s.d402.vouchers.get(v.jti)?.callsLeft).toBe(9);
+
+    // the real client sends a nonce on every spend, so two identical requests both succeed
+    const agent = newAgent(s.baseUrl, { solver: perfectSolver(s.truth), now: () => s.clock.t });
+    expect((await agent.fetch(`${s.baseUrl}/search?q=y`)).status).toBe(200);
+    expect((await agent.fetch(`${s.baseUrl}/search?q=y`)).status).toBe(200);
+  });
+
+  it("requireSpendNonce rejects the 5-line form outright", async () => {
+    const s = await startSeller({ bindVouchers: true, requireSpendNonce: true } as never);
+    const { kp, v } = await earned(s);
+    const res = await rawSpend(s, v.token, "/search?q=x", signedHeaders(kp, v.jti, s.clock.t));
+    expect(res.status).toBe(402);
+    expect(res.body.error).toBe("bad_signature");
+    const agent = newAgent(s.baseUrl, { solver: perfectSolver(s.truth), now: () => s.clock.t });
+    expect((await agent.fetch(`${s.baseUrl}/search?q=y`)).status).toBe(200);
+  });
+
+  it("replaying the exact same nonce-less headers within the skew still succeeds (v1 5-line form)", async () => {
+    // SPEC 7.2 documents this: without a nonce, a captured request replays for up to
+    // spendTimestampSkew seconds. Sellers that care set requireSpendNonce.
     const s = await seller();
     const { kp, v } = await earned(s);
     const h = signedHeaders(kp, v.jti, s.clock.t);

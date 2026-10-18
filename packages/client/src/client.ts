@@ -7,12 +7,13 @@ import {
   SubmitResult,
   WELL_KNOWN_PATH,
   findD402Accept,
+  newNonce,
   signSpend,
   signSubmit,
   type Answers,
   type Keypair,
 } from "@d402/spec";
-import { MemoryVoucherCache, type StoredVoucher, type VoucherCache } from "./cache.js";
+import { MemoryVoucherCache, scopeMatches, type StoredVoucher, type VoucherCache } from "./cache.js";
 import { D402Error } from "./errors.js";
 import type { Solver } from "./solvers.js";
 
@@ -280,15 +281,39 @@ export function createD402Client(opts: D402ClientOptions): D402Client {
     );
   }
 
+  /**
+   * On the first request to an origin this process has not seen a 402 from, a
+   * persisted voucher may still apply (same origin as its taskUrl, scope matches).
+   * Using it saves the 402 round trip and, for a solver-less client, is the only
+   * way a cached voucher gets spent without a discover() first.
+   */
+  async function findByOrigin(origin: string, path: string): Promise<StoredVoucher | undefined> {
+    const t = now();
+    let best: StoredVoucher | undefined;
+    for (const v of await cache.list()) {
+      let vo: string;
+      try {
+        vo = new URL(v.taskUrl).origin;
+      } catch {
+        continue;
+      }
+      if (vo !== origin || v.calls <= 0 || v.expiresAt <= t || !scopeMatches(v.scope, path)) continue;
+      if (!best || v.expiresAt < best.expiresAt) best = v;
+    }
+    return best;
+  }
+
   async function send(req: NormalizedRequest, voucher: StoredVoucher | undefined, path: string): Promise<Response> {
     const headers = new Headers(req.headers);
     if (voucher) {
       headers.set(HEADERS.voucher, voucher.token);
       if (signSpends) {
         const ts = now();
+        const nonce = newNonce();
         headers.set(HEADERS.key, keypair.publicKey);
         headers.set(HEADERS.timestamp, String(ts));
-        headers.set(HEADERS.sig, signSpend(keypair.privateKey, req.method, path, voucher.jti, ts));
+        headers.set(HEADERS.nonce, nonce);
+        headers.set(HEADERS.sig, signSpend(keypair.privateKey, req.method, path, voucher.jti, ts, nonce));
       }
     }
     return rawFetch(req.url, { ...req.init, method: req.method, headers, body: req.body });
@@ -321,6 +346,7 @@ export function createD402Client(opts: D402ClientOptions): D402Client {
     let voucher: StoredVoucher | undefined;
     const known = accepts.get(url.origin);
     if (known) voucher = await cache.find(known.sellerId, path, now());
+    else voucher = await findByOrigin(url.origin, path);
 
     const first = await send(req, voucher, path);
     if (first.status !== 402) {
@@ -335,6 +361,23 @@ export function createD402Client(opts: D402ClientOptions): D402Client {
 
     if (voucher && offer.error && VOUCHER_EVICT_ERRORS.has(offer.error)) {
       await cache.remove(voucher.jti);
+    }
+    // The offer says which paths a voucher would cover. Earning for a path outside
+    // that scope can never succeed, so hand the 402 back instead of wasting a bundle.
+    if (!scopeMatches(accept.scope, path)) return first;
+    // The 402 just taught us the sellerId. A voucher earned earlier (another process,
+    // or a seller reached through a different host) may already cover this path.
+    if (!voucher) {
+      const cached = await cache.find(accept.sellerId, path, now());
+      if (cached) {
+        const viaCache = await send(req, cached, path);
+        if (viaCache.status !== 402) {
+          await noteCalls(viaCache, cached);
+          return viaCache;
+        }
+        const o2 = await readOffer(viaCache);
+        if (o2?.error && VOUCHER_EVICT_ERRORS.has(o2.error)) await cache.remove(cached.jti);
+      }
     }
     if (!isReplayableBody(req.body)) {
       throw new D402Error(

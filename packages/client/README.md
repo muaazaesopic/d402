@@ -77,3 +77,45 @@ For tests and benchmarks, `createLookupSolver(recordOrFn)` answers from a map of
 - `client.submit(taskUrl, bundle, answers, accept?)`: signs with `signSubmit`, POSTs, stores and returns the `StoredVoucher`.
 - `client.earn(accept, tier?)`: the three steps above with retries on `quality`.
 - `client.status()`: everything in the cache.
+
+## CLI: `d402`
+
+The package ships a `d402` binary (zero extra dependencies) that drives the same client
+from a shell. State lives in `$D402_HOME` (default `~/.d402`): `keypair.json`,
+`vouchers.json` (a `FileVoucherCache`) and `pending/<bundleId>.json`.
+
+```sh
+d402 keygen                                   # create $D402_HOME/keypair.json, print the public key
+d402 discover http://localhost:8787           # the seller's d402 accept as JSON
+d402 bundle http://localhost:8787 --tier s    # print a bundle; also saved under $D402_HOME/pending/
+d402 submit <bundleId> --answers answers.json # sign + submit the pending bundle, print the voucher summary
+d402 earn http://localhost:8787 --tier s --answers key.json      # bundle -> solve -> submit in one go
+d402 earn http://localhost:8787 --solver-cmd "python solve.py"  # ...with a command as the solver
+d402 fetch "http://localhost:8787/search?q=gpu"                 # spend a cached voucher (prints status, headers, body)
+d402 fetch "http://localhost:8787/search?q=gpu" --auto-earn --solver-cmd "python solve.py"
+d402 fetch http://localhost:8787/search -X POST -d '{"q":"gpu"}' -H "X-Trace: 1"
+d402 status                                   # public key, cached vouchers, pending bundles
+```
+
+Solvers:
+
+- `--answers <file>`: a JSON object `{ "<itemId>": "<label>" }`. Every item in the bundle
+  must be present (`solver_missing_answer` otherwise); extra ids are ignored.
+- `--solver-cmd "<cmd>"`: the command gets the bundle JSON on stdin and must print
+  `{ "<itemId>": "<label>" }` (or `{ "answers": {...} }`) on stdout. Same contract as the
+  MCP package's `D402_SOLVER_CMD`.
+
+Environment: `D402_HOME`, `D402_MODEL` (sent as `D402-Model`), `D402_TIER` (default tier;
+`--tier` wins). `--home <dir>` overrides `D402_HOME`.
+
+Exit codes: `0` ok (any HTTP status from `fetch` counts as ok), `1` protocol error with
+`error: <code> <message>` on stderr (`bad_tier`, `quality`, `earn_failed`, `unknown_bundle`,
+`solver_failed`, ...), `2` usage.
+
+`fetch` without `--auto-earn` only spends: it attaches the best cached voucher for the
+seller (with the SPEC 7.1 signed headers) and prints whatever comes back, including a `402`.
+With `--auto-earn` it is `client.fetch`: a `402` triggers earn and one retry.
+
+For tests, `main(argv, { stdout, stderr, env, fetch, now })` is exported from
+`@d402/client/dist/cli.js`'s source (`src/cli.ts`) and returns the exit code; `fetch` can be a
+Hono `app.request` wrapper.

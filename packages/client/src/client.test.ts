@@ -325,24 +325,25 @@ describe("fetch wrapper", () => {
     expect(vouchers.map((v) => v.jti)).not.toContain(old!.jti);
   });
 
-  it("does not use a voucher for a path outside its scope", async () => {
+  it("does not use a voucher for a path outside its scope, and does not earn for it either", async () => {
     const { seller, client, cache } = setup();
     await client.fetch("https://api.test/search");
     expect(await cache.list()).toHaveLength(1);
     const res = await client.fetch("https://api.test/admin");
     expect(res.status).toBe(402);
     const admin = seller.requests.filter((r) => r.path === "/admin");
-    expect(admin).toHaveLength(2); // original + exactly one retry
+    expect(admin).toHaveLength(1); // the offer says /admin is out of scope: no retry, no bundle
     expect(admin[0]!.headers["d402-voucher"]).toBeUndefined();
-    const body = await res.json();
-    expect(body.error).toBe("scope_mismatch");
+    expect(seller.bundlesIssued).toBe(1);
   });
 
   it("does not loop when the retry is also 402", async () => {
-    const { seller, client } = setup();
-    const res = await client.fetch("https://api.test/nope");
+    // A binding seller plus a client that refuses to sign: the earned voucher is
+    // rejected on the retry, and the client must hand that 402 back, not earn again.
+    const { seller, client } = setup({ bindVouchers: true }, { signSpends: false });
+    const res = await client.fetch("https://api.test/search?q=loop");
     expect(res.status).toBe(402);
-    expect(seller.requests.filter((r) => r.path === "/nope")).toHaveLength(2);
+    expect(seller.requests.filter((r) => r.path === "/search")).toHaveLength(2);
     expect(seller.bundlesIssued).toBe(1);
   });
 
@@ -436,7 +437,10 @@ describe("spend signing (SPEC 7.1)", () => {
       expect(r.headers["d402-timestamp"]).toBe("1700000000");
       expect(r.spendSig).toBe("valid");
       const jti = JSON.parse(Buffer.from(r.headers["d402-voucher"]!.split(".")[1]!, "base64url").toString()).jti;
-      expect(verifySpend(keypair.publicKey, "GET", "/search", jti, 1_700_000_000, r.headers["d402-sig"]!)).toBe(true);
+      expect(r.headers["d402-nonce"]).toHaveLength(22);
+      expect(
+        verifySpend(keypair.publicKey, "GET", "/search", jti, 1_700_000_000, r.headers["d402-sig"]!, r.headers["d402-nonce"]),
+      ).toBe(true);
     }
   });
 

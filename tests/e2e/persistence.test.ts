@@ -140,17 +140,18 @@ describe("FileVoucherCache", () => {
     expect((await a.status())[0]!.calls).toBe(8);
   });
 
-  it("without discover() a solver-less client cannot know the seller and fails with no_solver", async () => {
+  it("without discover() a solver-less client still spends a persisted voucher whose taskUrl shares the origin", async () => {
     const s = await seller();
     const dir = tmp();
     const kp = generateKeypair();
     const a = newAgent(s.baseUrl, { solver: perfectSolver(s.truth), keypair: kp, cache: new FileVoucherCache(dir) });
     await a.fetch(`${s.baseUrl}/search?q=a`);
+    const vouchersBefore = s.d402.tasks.stats().vouchers;
     const b = newAgent(s.baseUrl, { keypair: kp, cache: new FileVoucherCache(dir) });
-    // NOTE: the client only consults the cache for origins it has seen (via
-    // discover() or an earlier 402), so the first request goes out bare, gets
-    // a 402, and the client tries to earn. The cached voucher is not used.
-    await expect(b.fetch(`${s.baseUrl}/search?q=b`)).rejects.toMatchObject({ code: "no_solver" });
+    const res = await b.fetch(`${s.baseUrl}/search?q=b`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get(HEADERS.callsRemaining)).toBe("8");
+    expect(s.d402.tasks.stats().vouchers).toBe(vouchersBefore);
   });
 
   it("a voucher the seller reports as expired is removed from the file", async () => {

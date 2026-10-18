@@ -2,6 +2,7 @@ import {
   createPrivateKey,
   createPublicKey,
   generateKeyPairSync,
+  randomBytes,
   sign as nodeSign,
   verify as nodeVerify,
   type KeyObject,
@@ -92,13 +93,25 @@ export function verifySubmit(
   return verifyBytes(publicKey, submitMessage(bundleId, answers), sig);
 }
 
-/** Message the agent signs on a bound spend (section 7.1). */
-export function spendMessage(method: string, path: string, jti: string, timestamp: number): string {
-  return `${SIGN_PREFIX.spend}\n${method.toUpperCase()}\n${path}\n${jti}\n${timestamp}`;
+/**
+ * Message the agent signs on a bound spend (section 7.1). When a nonce is given
+ * (section 7.2) it is appended as a 6th line; without one the 5-line form is used,
+ * so v1 clients that send no nonce still verify.
+ */
+export function spendMessage(method: string, path: string, jti: string, timestamp: number, nonce?: string): string {
+  const base = `${SIGN_PREFIX.spend}\n${method.toUpperCase()}\n${path}\n${jti}\n${timestamp}`;
+  return nonce === undefined ? base : `${base}\n${nonce}`;
 }
 
-export function signSpend(privateKey: string, method: string, path: string, jti: string, timestamp: number): string {
-  return signBytes(privateKey, spendMessage(method, path, jti, timestamp));
+export function signSpend(
+  privateKey: string,
+  method: string,
+  path: string,
+  jti: string,
+  timestamp: number,
+  nonce?: string,
+): string {
+  return signBytes(privateKey, spendMessage(method, path, jti, timestamp, nonce));
 }
 
 export function verifySpend(
@@ -108,6 +121,12 @@ export function verifySpend(
   jti: string,
   timestamp: number,
   sig: string,
+  nonce?: string,
 ): boolean {
-  return verifyBytes(publicKey, spendMessage(method, path, jti, timestamp), sig);
+  return verifyBytes(publicKey, spendMessage(method, path, jti, timestamp, nonce), sig);
+}
+
+/** 16 random bytes, base64url: the recommended D402-Nonce value. */
+export function newNonce(): string {
+  return b64u(randomBytes(16));
 }

@@ -29,8 +29,33 @@ and d402 side by side and the agent picks.
 | `@d402/server` | Hono middleware for sellers: offer, bundles, grading, trust, vouchers. SQLite via `node:sqlite`. CLI `d402-tasks`. |
 | `@d402/client` | Fetch wrapper for agents: earns on 402, caches vouchers, retries. Pluggable solver. |
 | `@d402/mcp` | MCP server so an LLM agent is its own solver: `d402_get_bundle`, `d402_submit`, `d402_fetch`, `d402_status`, `d402_discover`. |
-| `examples/search-proxy` | A gated search API with a curl walkthrough. |
+| `@d402/proxy` | `d402-proxy`: put a d402 gate in front of any existing API with one command. No code. |
+| `clients/python` | Python client with the same keypair and voucher files as the TS client. Signatures verified byte-equal. |
+| `clients/curl` | The whole protocol in a bash script: curl, jq and one signing call. |
+| `examples/search-proxy` | A gated search API with a live dashboard for demos. |
+| `use-cases/` | 7 runnable stories: dataset builder, x402 side by side, rate-limit upgrade, MCP agent, multi-seller wallet, trust tiers, paid crawl. |
 | `bench/` | Simulated agents against hidden ground truth. Produces the 6 go/no-go numbers. |
+
+## Three ways in
+
+Seller with an existing API and no time:
+
+```sh
+npx d402-proxy --upstream https://api.example.com --tasks tickets.jsonl --scope /v1 --admin-token demo
+```
+
+Agent in Claude Code or Claude Desktop:
+
+```sh
+claude mcp add d402 -e D402_HOME=~/.d402 -- d402-mcp
+```
+
+Human at a terminal:
+
+```sh
+d402 earn https://api.example.com --answers key.json
+d402 fetch https://api.example.com/v1/search?q=rates
+```
 
 ## Quick start
 
@@ -39,8 +64,13 @@ pnpm install
 pnpm build
 pnpm test          # unit + e2e
 pnpm bench         # prints the metrics table, writes bench/out/report.md
-pnpm example       # gated search API on :8787
+pnpm example       # gated search API on :8787, dashboard at /dashboard?token=demo
+pnpm --workspace-concurrency=1 --filter 'd402-uc-*' run start   # all 7 use cases
+bash clients/curl/walkthrough.sh                                 # the protocol in curl
+cd clients/python && python3 -m unittest                         # Python client tests
 ```
+
+Test count: 432 vitest (unit, e2e over real HTTP, MCP over real stdio, proxy, use cases) plus 24 Python.
 
 Seller side, 10 lines:
 
@@ -111,6 +141,10 @@ which real models on the same family may not.
 
 ## Status
 
-v1. One task type (`classify`). Bearer vouchers by default, key-bound vouchers
-with `bindVouchers: true`. Key and IP rate limits are the only Sybil defence.
-See `spec/SPEC.md` section 11.
+v1. One task type (`classify`). Bearer vouchers by default; `bindVouchers: true`
+ties spends to the agent's Ed25519 key and `requireSpendNonce: true` closes replay
+inside the clock skew (spec 7.2). Key and IP rate limits are the only Sybil
+defence. See `spec/SPEC.md` section 11.
+
+Packages are not on npm yet. Until they are, `pnpm build` and run the bins from
+`packages/*/dist`, or `pnpm link` them.

@@ -81,6 +81,25 @@ importers:
         specifier: ^4.0.0
         version: 4.6.7
 
+  packages/proxy:
+    dependencies:
+      '@d402/server':
+        specifier: workspace:*
+        version: link:../server
+      '@d402/spec':
+        specifier: workspace:*
+        version: link:../spec
+      '@hono/node-server':
+        specifier: ^2.1.0
+        version: 2.1.5(hono@4.13.13)
+      hono:
+        specifier: ^4.13.0
+        version: 4.13.13
+    devDependencies:
+      '@d402/client':
+        specifier: workspace:*
+        version: link:../client
+
   packages/server:
     dependencies:
       '@d402/spec':
@@ -101,6 +120,135 @@ importers:
       zod:
         specifier: ^4.0.0
         version: 4.6.7
+
+  use-cases/01-dataset-builder:
+    dependencies:
+      '@d402/client':
+        specifier: workspace:*
+        version: link:../../packages/client
+      '@d402/server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@d402/spec':
+        specifier: workspace:*
+        version: link:../../packages/spec
+      '@hono/node-server':
+        specifier: ^2.1.0
+        version: 2.1.5(hono@4.13.13)
+      hono:
+        specifier: ^4.13.0
+        version: 4.13.13
+
+  use-cases/02-x402-side-by-side:
+    dependencies:
+      '@d402/client':
+        specifier: workspace:*
+        version: link:../../packages/client
+      '@d402/server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@d402/spec':
+        specifier: workspace:*
+        version: link:../../packages/spec
+      '@hono/node-server':
+        specifier: ^2.1.0
+        version: 2.1.5(hono@4.13.13)
+      hono:
+        specifier: ^4.13.0
+        version: 4.13.13
+
+  use-cases/03-rate-limit-upgrade:
+    dependencies:
+      '@d402/client':
+        specifier: workspace:*
+        version: link:../../packages/client
+      '@d402/server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@d402/spec':
+        specifier: workspace:*
+        version: link:../../packages/spec
+      '@hono/node-server':
+        specifier: ^2.1.0
+        version: 2.1.5(hono@4.13.13)
+      hono:
+        specifier: ^4.13.0
+        version: 4.13.13
+
+  use-cases/04-mcp-agent:
+    dependencies:
+      '@d402/client':
+        specifier: workspace:*
+        version: link:../../packages/client
+      '@d402/server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@d402/spec':
+        specifier: workspace:*
+        version: link:../../packages/spec
+      '@hono/node-server':
+        specifier: ^2.1.0
+        version: 2.1.5(hono@4.13.13)
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.32.0
+        version: 1.32.1(zod@4.6.7)
+      hono:
+        specifier: ^4.13.0
+        version: 4.13.13
+
+  use-cases/05-multi-seller-wallet:
+    dependencies:
+      '@d402/client':
+        specifier: workspace:*
+        version: link:../../packages/client
+      '@d402/server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@d402/spec':
+        specifier: workspace:*
+        version: link:../../packages/spec
+      '@hono/node-server':
+        specifier: ^2.1.0
+        version: 2.1.5(hono@4.13.13)
+      hono:
+        specifier: ^4.13.0
+        version: 4.13.13
+
+  use-cases/06-trust-tiers:
+    dependencies:
+      '@d402/client':
+        specifier: workspace:*
+        version: link:../../packages/client
+      '@d402/server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@d402/spec':
+        specifier: workspace:*
+        version: link:../../packages/spec
+      '@hono/node-server':
+        specifier: ^2.1.0
+        version: 2.1.5(hono@4.13.13)
+      hono:
+        specifier: ^4.13.0
+        version: 4.13.13
+
+  use-cases/07-paid-crawl:
+    dependencies:
+      '@d402/client':
+        specifier: workspace:*
+        version: link:../../packages/client
+      '@d402/server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@d402/spec':
+        specifier: workspace:*
+        version: link:../../packages/spec
+      '@hono/node-server':
+        specifier: ^2.1.0
+        version: 2.1.5(hono@4.13.13)
+      hono:
+        specifier: ^4.13.0
+        version: 4.13.13
 
 packages:
 

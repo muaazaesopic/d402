@@ -18,6 +18,7 @@ export interface LoggedRequest {
   body?: string;
   /** For spend requests: whether 7.1 headers were present and verified. */
   spendSig?: "missing" | "valid" | "invalid";
+  spendNonce?: string;
 }
 
 export interface FakeSellerOptions {
@@ -237,7 +238,9 @@ export function createFakeSeller(opts: FakeSellerOptions = {}): FakeSeller {
     const ts = req.headers.get(HEADERS.timestamp);
     const sig = req.headers.get(HEADERS.sig);
     if (sigKey && ts && sig) {
-      const ok = sigKey === vs.sub && verifySpend(sigKey, req.method, path, vs.jti, Number(ts), sig);
+      const nonce = req.headers.get(HEADERS.nonce) ?? undefined;
+      log.spendNonce = nonce;
+      const ok = sigKey === vs.sub && verifySpend(sigKey, req.method, path, vs.jti, Number(ts), sig, nonce);
       log.spendSig = ok ? "valid" : "invalid";
       if (opts.bindVouchers) {
         if (Math.abs(now() - Number(ts)) > 300) return offerResponse("stale_timestamp", "stale");
