@@ -57,6 +57,27 @@ importers:
         specifier: ^4.13.0
         version: 4.13.13
 
+  examples/site-review:
+    dependencies:
+      '@d402/server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@d402/spec':
+        specifier: workspace:*
+        version: link:../../packages/spec
+      '@hono/node-server':
+        specifier: ^2.1.0
+        version: 2.1.5(hono@4.13.13)
+      hono:
+        specifier: ^4.13.0
+        version: 4.13.13
+      jose:
+        specifier: ^6.2.0
+        version: 6.2.12
+      zod:
+        specifier: ^4.0.0
+        version: 4.6.7
+
   packages/client:
     dependencies:
       '@d402/spec':

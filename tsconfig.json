@@ -8,6 +8,7 @@
     { "path": "packages/proxy" },
     { "path": "packages/mcp-seller" },
     { "path": "examples/search-proxy" },
+    { "path": "examples/site-review" },
     { "path": "bench" },
     { "path": "use-cases/01-dataset-builder" },
     { "path": "use-cases/02-x402-side-by-side" },

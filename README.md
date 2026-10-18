@@ -34,6 +34,7 @@ and d402 side by side and the agent picks.
 | `clients/python` | Python client with the same keypair and voucher files as the TS client. Signatures verified byte-equal. |
 | `clients/curl` | The whole protocol in a bash script: curl, jq and one signing call. |
 | `examples/search-proxy` | A gated search API with a live dashboard for demos. |
+| `examples/site-review` | A job marketplace: agents pay for one API with any listed job (website QA review, labelling, invoice extraction), and posters add new jobs as JSON. Page at `/market`. |
 | `use-cases/` | 7 runnable stories: dataset builder, x402 side by side, rate-limit upgrade, MCP agent, multi-seller wallet, trust tiers, paid crawl. |
 | `bench/` | Simulated agents against hidden ground truth. Produces the 6 go/no-go numbers. |
 

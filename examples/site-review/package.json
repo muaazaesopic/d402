@@ -1,0 +1,20 @@
+{
+  "name": "d402-example-site-review",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "demo": "tsx src/agent-demo.ts",
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@d402/server": "workspace:*",
+    "@d402/spec": "workspace:*",
+    "@hono/node-server": "^2.1.0",
+    "hono": "^4.13.0",
+    "jose": "^6.2.0",
+    "zod": "^4.0.0"
+  }
+}

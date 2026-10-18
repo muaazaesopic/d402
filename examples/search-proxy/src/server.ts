@@ -83,6 +83,7 @@ export function createApp(opts: AppOptions = {}): { app: Hono; d402: D402Server;
   d402.tasks.loadFile(opts.tasksPath ?? TASKS_PATH);
 
   const app = new Hono();
+  app.get("/", (c) => c.redirect(adminToken ? `/dashboard?token=${encodeURIComponent(adminToken)}` : "/dashboard"));
   app.get("/health", (c) => c.json({ ok: true, ...d402.tasks.stats() }));
   app.get("/dashboard", (c) => c.html(dashboardHtml(SELLER_ID)));
   app.route("/", d402.routes);
