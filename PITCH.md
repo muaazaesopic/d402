@@ -55,16 +55,15 @@ d402 inside Blaxel.
 
 ## Manufact ("best MCP server for agents", $3k cash + $3k credits, Claude Connectors marketplace)
 
-Honest status first: our agent-side MCP server (`@d402/mcp`) is a local stdio
-server that holds the agent's key. That is not what Manufact hosts. Manufact
-hosts remote MCP servers deployed from a GitHub repo. The piece that fits their
-track is the SELLER side: a remote MCP server whose tools are paid in labels.
-That is being built now as `@d402/mcp-seller` (Streamable HTTP, one voucher
-valid on both the HTTP routes and the MCP tools, session mode for keyless
-clients, key mode for agents with a keypair). Only pitch Manufact once it is in
-the repo and running.
+Status: this fits now. `@d402/mcp-seller` is in the repo: a remote MCP server
+over Streamable HTTP whose tools are paid in labels. One voucher is valid on
+both the seller's HTTP routes and its MCP tools. Session mode needs no keypair
+(zero setup, trust resets per session); key mode carries the agent's Ed25519
+identity and trust. Run it with `pnpm --filter @d402/mcp-seller run start`; the
+binary serves a demo `search` tool out of the box. Our agent-side server
+(`@d402/mcp`, local stdio) is the other half; pitch the seller side to Manufact.
 
-Opener (once it exists): "An MCP server where the tools cost labels instead of
+Opener: "An MCP server where the tools cost labels instead of
 money. The agent calls `search`, gets 'payment required' with instructions,
 calls `d402_get_bundle`, labels 5 items, calls `d402_submit`, then calls
 `search` again with the voucher. Zero signup, zero card, hostable anywhere a

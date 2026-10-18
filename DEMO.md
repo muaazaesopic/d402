@@ -98,10 +98,14 @@ Agents do."
 
 ## If there is a track pitch for "Best MCP server for agents"
 
-Lead with the MCP server. The pitch: every MCP server that costs money to run
-needs a way to charge agents. d402 is a drop-in MCP tool set that lets any agent
-pay in work, and the seller side is one command. Demo the earn flow inside
-Claude Code and nothing else.
+Lead with `@d402/mcp-seller`: a remote MCP server whose tools cost labels. Start
+it (`pnpm --filter @d402/mcp-seller run start`), add it to Claude Code as a
+remote MCP server, and ask Claude to use the `search` tool. It gets "payment
+required" with instructions, calls `d402_get_bundle`, labels 5 items, calls
+`d402_submit`, then `search` again with the voucher. No keypair, no wallet, no
+signup. Then show the same voucher spending on the HTTP route. That is the whole
+Manufact pitch: every MCP server that costs money to run needs a way to charge
+agents that have no wallet, and it is hostable anywhere Streamable HTTP runs.
 
 ## One-liners by audience
 
