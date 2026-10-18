@@ -1,0 +1,20 @@
+{
+  "name": "@d402/mcp-seller",
+  "version": "0.1.0",
+  "description": "d402 seller as a remote MCP server: tools paid for in labelled data, hostable anywhere Streamable HTTP runs",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "bin": { "d402-mcp-seller": "./dist/cli.js" },
+  "files": ["dist"],
+  "scripts": { "build": "tsc -b", "test": "vitest run", "start": "tsx src/cli.ts" },
+  "dependencies": {
+    "@d402/server": "workspace:*",
+    "@d402/spec": "workspace:*",
+    "@hono/node-server": "^2.1.0",
+    "@modelcontextprotocol/sdk": "^1.32.0",
+    "hono": "^4.13.0",
+    "zod": "^4.0.0"
+  }
+}

@@ -101,12 +101,70 @@ export interface VoucherRecord {
   exp: number;
 }
 
+export interface IssueBundleInput {
+  /** The agent's base64url Ed25519 public key (the `D402-Key` header value). */
+  key: string;
+  /** Tier id; default the first tier of the offer. */
+  tier?: string;
+  /** Client IP for the per-IP rate limit; default "unknown". */
+  ip?: string;
+  /** Declared model family (the `D402-Model` header value). */
+  model?: string;
+}
+
+export interface SubmitBundleInput {
+  key: string;
+  bundleId: string;
+  answers: Record<string, string>;
+  /** Ed25519 signature over the submit message (SPEC 5). */
+  sig: string;
+  model?: string;
+}
+
+export interface SpendInput {
+  /** The voucher JWT (the `D402-Voucher` header value). */
+  token: string;
+  /** Request path without query; must be inside the voucher scope. */
+  path: string;
+  /** Method named in the bound-spend signature (SPEC 7.1). Default "GET". */
+  method?: string;
+  /** Bound spending (SPEC 7.1): the agent key, unix-seconds timestamp and signature. */
+  key?: string;
+  timestamp?: number;
+  sig?: string;
+  /** Spend nonce (SPEC 7.2). */
+  nonce?: string;
+}
+
+export type SpendResult = { remaining: number; claims: VoucherClaims } | { error: ErrorCode; message: string };
+
 export interface D402Server {
   /** Hono middleware for gated routes (SPEC 7). */
   gate: MiddlewareHandler;
   /** GET /.well-known/d402 ; GET /.well-known/d402/tasks ; POST /.well-known/d402/tasks/:bundleId */
   routes: Hono;
   offer(error?: ErrorCode, message?: string): Offer;
+  /**
+   * What `GET /.well-known/d402/tasks` does, without HTTP. Throws `TaskError`
+   * with the code the route would answer: missing_key, bad_key, blocked,
+   * bad_tier, rate_limited (with retryAfter), no_tasks.
+   */
+  issueBundle(input: IssueBundleInput): Bundle;
+  /**
+   * What `POST /.well-known/d402/tasks/:bundleId` does, without HTTP. Throws
+   * `TaskError`: missing_key, bad_key, blocked, bad_request, unknown_bundle,
+   * already_submitted, expired_bundle, bad_signature, incomplete, bad_label,
+   * quality.
+   */
+  submitBundle(input: SubmitBundleInput): Promise<SubmitResult>;
+  /**
+   * What the gate does, without Hono: verify the voucher (signature, exp,
+   * scope, jti), check the bound-spend signature and nonce when the seller
+   * binds vouchers (SPEC 7.1, 7.2), and decrement. On success returns the
+   * calls remaining and the claims; on failure the error code and message
+   * the gate would put in its 402 body.
+   */
+  spend(input: SpendInput): Promise<SpendResult>;
   tasks: {
     load(items: TaskFileItem[]): number;
     loadFile(path: string): number;
@@ -141,13 +199,25 @@ const ERROR_STATUS: Partial<Record<ErrorCode, number>> = {
   bad_request: 400,
 };
 
-class TaskError extends Error {
+/**
+ * Thrown by `issueBundle` and `submitBundle`. `code` and `message` are exactly
+ * what the task routes put in their JSON error body, `status` is the HTTP
+ * status the route answers with, and `retryAfter` (seconds) is set for
+ * `rate_limited`, where the route also sets a `Retry-After` header.
+ */
+export class TaskError extends Error {
+  readonly status: number;
+  readonly retryAfter?: number;
   constructor(
     readonly code: ErrorCode,
     message: string,
     readonly headers: Record<string, string> = {},
   ) {
     super(message);
+    this.name = "TaskError";
+    this.status = ERROR_STATUS[code] ?? 400;
+    const ra = headers["Retry-After"];
+    if (ra !== undefined) this.retryAfter = Number(ra);
   }
 }
 
@@ -260,11 +330,20 @@ export function createD402(opts: D402ServerOptions): D402Server {
 
   // -- shared request helpers ----------------------------------------------
 
-  function requireKey(c: Context): string {
-    const key = c.req.header(HEADERS.key);
+  function validateKey(key: string | undefined): string {
     if (!key) throw new TaskError("missing_key", `${HEADERS.key} header is required`);
     if (!isValidPublicKey(key)) throw new TaskError("bad_key", `${HEADERS.key} is not a valid Ed25519 public key`);
     return key;
+  }
+
+  function requireKey(c: Context): string {
+    return validateKey(c.req.header(HEADERS.key));
+  }
+
+  function assertNotBlocked(key: string): void {
+    if (isBlocked(store.getAgent(key) ?? { goldenSeen: 0, goldenCorrect: 0, bundles: 0 })) {
+      throw new TaskError("blocked", "this key is blocked");
+    }
   }
 
   function taskErrorResponse(c: Context, e: TaskError) {
@@ -464,7 +543,48 @@ export function createD402(opts: D402ServerOptions): D402Server {
     store.resolveItem(itemId, answer);
   }
 
-  // -- routes ---------------------------------------------------------------
+  // -- programmatic API: issue and submit ----------------------------------
+
+  function issueBundle(input: IssueBundleInput): Bundle {
+    const t = now();
+    const key = validateKey(input.key);
+    const model = input.model ?? null;
+    const agent = store.ensureAgent(key, model);
+    if (isBlocked(agent)) throw new TaskError("blocked", "this key is blocked");
+
+    const tierId = input.tier;
+    const tier = tierId === undefined ? accept.tiers[0]! : tiersById.get(tierId);
+    if (!tier) throw new TaskError("bad_tier", `unknown tier ${JSON.stringify(tierId)}`);
+
+    const ip = input.ip ?? "unknown";
+    checkRateLimits(key, ip, t);
+    return buildBundle(agent, tier, ip, t);
+  }
+
+  async function submitBundle(input: SubmitBundleInput): Promise<SubmitResult> {
+    const t = now();
+    const key = validateKey(input.key);
+    const bundleId = input.bundleId;
+    assertNotBlocked(key);
+
+    const parsed = SubmitBody.safeParse({ answers: input.answers, sig: input.sig, model: input.model });
+    if (!parsed.success) throw new TaskError("bad_request", "body does not match SubmitBody");
+    const body = parsed.data;
+
+    const bundle = store.getBundle(bundleId);
+    if (!bundle) throw new TaskError("unknown_bundle", "no such bundle");
+    if (bundle.submittedAt !== null) throw new TaskError("already_submitted", "bundle was already submitted");
+    if (bundle.expiresAt <= t) throw new TaskError("expired_bundle", "bundle has expired");
+    if (bundle.agent !== key || !verifySubmit(key, bundleId, body.answers, body.sig)) {
+      throw new TaskError("bad_signature", "signature does not verify for this key and bundle");
+    }
+
+    const outcome = await grade(key, bundle, body.answers, body.model ?? null, t);
+    if (!outcome.passed) throw new TaskError("quality", "bundle did not meet the quality bar");
+    return outcome.result!;
+  }
+
+  // -- routes (thin wrappers over issueBundle / submitBundle) ---------------
 
   const routes = new Hono();
 
@@ -472,18 +592,8 @@ export function createD402(opts: D402ServerOptions): D402Server {
 
   routes.get(WELL_KNOWN_TASKS_PATH, (c) => {
     try {
-      const t = now();
       const key = requireKey(c);
-      const model = c.req.header(HEADERS.model) ?? null;
-      const agent = store.ensureAgent(key, model);
-      if (isBlocked(agent)) throw new TaskError("blocked", "this key is blocked");
-
-      const tierId = c.req.query("tier");
-      const tier = tierId === undefined ? accept.tiers[0]! : tiersById.get(tierId);
-      if (!tier) throw new TaskError("bad_tier", `unknown tier ${JSON.stringify(tierId)}`);
-
-      checkRateLimits(key, clientIp(c), t);
-      const bundle = buildBundle(agent, tier, clientIp(c), t);
+      const bundle = issueBundle({ key, tier: c.req.query("tier"), ip: clientIp(c), model: c.req.header(HEADERS.model) });
       return c.json(bundle, 200);
     } catch (e) {
       if (e instanceof TaskError) return taskErrorResponse(c, e);
@@ -493,12 +603,9 @@ export function createD402(opts: D402ServerOptions): D402Server {
 
   routes.post(`${WELL_KNOWN_TASKS_PATH}/:bundleId`, async (c) => {
     try {
-      const t = now();
       const key = requireKey(c);
       const bundleId = c.req.param("bundleId");
-      if (isBlocked(store.getAgent(key) ?? { goldenSeen: 0, goldenCorrect: 0, bundles: 0 })) {
-        throw new TaskError("blocked", "this key is blocked");
-      }
+      assertNotBlocked(key);
 
       let raw: unknown;
       try {
@@ -510,38 +617,26 @@ export function createD402(opts: D402ServerOptions): D402Server {
       if (!parsed.success) throw new TaskError("bad_request", "body does not match SubmitBody");
       const body = parsed.data;
 
-      const bundle = store.getBundle(bundleId);
-      if (!bundle) throw new TaskError("unknown_bundle", "no such bundle");
-      if (bundle.submittedAt !== null) throw new TaskError("already_submitted", "bundle was already submitted");
-      if (bundle.expiresAt <= t) throw new TaskError("expired_bundle", "bundle has expired");
-      if (bundle.agent !== key || !verifySubmit(key, bundleId, body.answers, body.sig)) {
-        throw new TaskError("bad_signature", "signature does not verify for this key and bundle");
-      }
-
-      const model = body.model ?? c.req.header(HEADERS.model) ?? null;
-      const outcome = await grade(key, bundle, body.answers, model, t);
-      if (!outcome.passed) {
-        return c.json({ error: "quality", message: "bundle did not meet the quality bar" }, 422);
-      }
-      return c.json(outcome.result, 200);
+      const result = await submitBundle({
+        key,
+        bundleId,
+        answers: body.answers,
+        sig: body.sig,
+        model: body.model ?? c.req.header(HEADERS.model),
+      });
+      return c.json(result, 200);
     } catch (e) {
       if (e instanceof TaskError) return taskErrorResponse(c, e);
       throw e;
     }
   });
 
-  // -- gate (SPEC 7, 7.1) ---------------------------------------------------
+  // -- spend (SPEC 7, 7.1, 7.2) ---------------------------------------------
 
-  // Hono's "/search/*" also matches "/search", so mounting the gate on both
-  // (the documented usage) runs it twice per request. Remember requests that
-  // already paid so the second pass is a no-op.
-  const spent = new WeakSet<Request>();
+  async function spend(input: SpendInput): Promise<SpendResult> {
+    const fail = (error: ErrorCode, message: string): SpendResult => ({ error, message });
 
-  const gate: MiddlewareHandler = async (c, next) => {
-    if (spent.has(c.req.raw)) return next();
-    const fail = (code: ErrorCode, message: string) => c.json(offer(code, message), 402);
-
-    const token = c.req.header(HEADERS.voucher);
+    const token = input.token;
     if (!token) return fail("missing_voucher", `${HEADERS.voucher} header is required`);
 
     const t = now();
@@ -561,7 +656,7 @@ export function createD402(opts: D402ServerOptions): D402Server {
     }
     if (claims.exp <= t) return fail("voucher_expired", "voucher has expired");
 
-    const path = c.req.path;
+    const path = input.path;
     if (!scopeMatches(claims.scope, path)) return fail("scope_mismatch", "path is outside the voucher scope");
 
     const stored = store.getVoucher(claims.jti);
@@ -569,22 +664,21 @@ export function createD402(opts: D402ServerOptions): D402Server {
     if (!scopeMatches(stored.scope, path)) return fail("scope_mismatch", "path is outside the voucher scope");
 
     if (bindVouchers) {
-      const key = c.req.header(HEADERS.key);
+      const key = input.key;
       if (!key || key !== claims.sub) return fail("bad_key", `${HEADERS.key} must equal the voucher subject`);
-      const tsRaw = c.req.header(HEADERS.timestamp);
-      const ts = tsRaw === undefined ? NaN : Number(tsRaw);
+      const ts = input.timestamp === undefined ? NaN : input.timestamp;
       if (!Number.isFinite(ts) || Math.abs(t - ts) > DEFAULTS.spendTimestampSkew) {
         return fail("stale_timestamp", `${HEADERS.timestamp} is missing or outside the allowed skew`);
       }
-      const sig = c.req.header(HEADERS.sig);
-      const nonce = c.req.header(HEADERS.nonce);
+      const sig = input.sig;
+      const nonce = input.nonce;
       if (nonce === undefined && requireSpendNonce) {
         return fail("bad_signature", `${HEADERS.nonce} is required by this seller`);
       }
       if (nonce !== undefined && (nonce.length < 8 || nonce.length > 128)) {
         return fail("bad_signature", `${HEADERS.nonce} must be 8 to 128 characters`);
       }
-      if (!sig || !verifySpend(key, c.req.method, path, claims.jti, ts, sig, nonce)) {
+      if (!sig || !verifySpend(key, input.method ?? "GET", path, claims.jti, ts, sig, nonce)) {
         return fail("bad_signature", `${HEADERS.sig} does not verify`);
       }
       if (nonce !== undefined) {
@@ -601,9 +695,32 @@ export function createD402(opts: D402ServerOptions): D402Server {
     if (stored.callsLeft <= 0) return fail("voucher_exhausted", "voucher has no calls left");
     const remaining = store.spendVoucher(claims.jti);
     if (remaining === undefined) return fail("voucher_exhausted", "voucher has no calls left");
+    return { remaining, claims };
+  }
+
+  // -- gate (thin wrapper over spend) ---------------------------------------
+
+  // Hono's "/search/*" also matches "/search", so mounting the gate on both
+  // (the documented usage) runs it twice per request. Remember requests that
+  // already paid so the second pass is a no-op.
+  const spent = new WeakSet<Request>();
+
+  const gate: MiddlewareHandler = async (c, next) => {
+    if (spent.has(c.req.raw)) return next();
+    const tsRaw = c.req.header(HEADERS.timestamp);
+    const r = await spend({
+      token: c.req.header(HEADERS.voucher) ?? "",
+      path: c.req.path,
+      method: c.req.method,
+      key: c.req.header(HEADERS.key),
+      timestamp: tsRaw === undefined ? undefined : Number(tsRaw),
+      sig: c.req.header(HEADERS.sig),
+      nonce: c.req.header(HEADERS.nonce),
+    });
+    if ("error" in r) return c.json(offer(r.error, r.message), 402);
 
     spent.add(c.req.raw);
-    c.header(HEADERS.callsRemaining, String(remaining));
+    c.header(HEADERS.callsRemaining, String(r.remaining));
     await next();
   };
 
@@ -615,6 +732,9 @@ export function createD402(opts: D402ServerOptions): D402Server {
     gate,
     routes,
     offer,
+    issueBundle,
+    submitBundle,
+    spend,
     tasks: {
       load: (items) => pool.loadItems(store, items),
       loadFile: (path) => pool.loadFile(store, path),

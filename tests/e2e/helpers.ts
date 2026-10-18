@@ -468,10 +468,13 @@ export function decodeJwtPayload(token: string): Record<string, unknown> {
 }
 
 export function tamperJwtSignature(token: string): string {
+  // Flip a character in the middle of the signature. The last base64url character
+  // of a 32-byte HMAC carries only 2 real bits plus padding, so flipping it can
+  // leave the decoded bytes unchanged and the token valid.
   const parts = token.split(".");
   const sig = parts[2]!;
-  const last = sig[sig.length - 1]!;
-  const replacement = last === "A" ? "B" : "A";
-  parts[2] = sig.slice(0, -1) + replacement;
+  const i = 10;
+  const replacement = sig[i] === "A" ? "B" : "A";
+  parts[2] = sig.slice(0, i) + replacement + sig.slice(i + 1);
   return parts.join(".");
 }

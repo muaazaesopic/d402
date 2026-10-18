@@ -30,6 +30,7 @@ and d402 side by side and the agent picks.
 | `@d402/client` | Fetch wrapper for agents: earns on 402, caches vouchers, retries. Pluggable solver. |
 | `@d402/mcp` | MCP server so an LLM agent is its own solver: `d402_get_bundle`, `d402_submit`, `d402_fetch`, `d402_status`, `d402_discover`. |
 | `@d402/proxy` | `d402-proxy`: put a d402 gate in front of any existing API with one command. No code. |
+| `@d402/mcp-seller` | `d402-mcp-seller`: the seller as a remote MCP server (Streamable HTTP). Tools paid for in labelled data; one voucher works on HTTP routes and MCP tools; session or key identity; `--tools-module` for your own gated tools. |
 | `clients/python` | Python client with the same keypair and voucher files as the TS client. Signatures verified byte-equal. |
 | `clients/curl` | The whole protocol in a bash script: curl, jq and one signing call. |
 | `examples/search-proxy` | A gated search API with a live dashboard for demos. |
@@ -42,6 +43,12 @@ Seller with an existing API and no time:
 
 ```sh
 npx d402-proxy --upstream https://api.example.com --tasks tickets.jsonl --scope /v1 --admin-token demo
+```
+
+Seller who wants to be an MCP connector (tools paid in labelled data, same vouchers as the HTTP routes):
+
+```sh
+npx d402-mcp-seller --tasks tickets.jsonl --labels a,b,c --scope /mcp --port 8788 --secret $D402_SECRET
 ```
 
 Agent in Claude Code or Claude Desktop:
@@ -70,7 +77,7 @@ bash clients/curl/walkthrough.sh                                 # the protocol 
 cd clients/python && python3 -m unittest                         # Python client tests
 ```
 
-Test count: 432 vitest (unit, e2e over real HTTP, MCP over real stdio, proxy, use cases) plus 24 Python.
+Test count: 466 vitest (unit, e2e over real HTTP, MCP over real stdio and Streamable HTTP, proxy, seller MCP server, use cases) plus 24 Python.
 
 Seller side, 10 lines:
 

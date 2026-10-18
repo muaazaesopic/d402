@@ -11,6 +11,7 @@ export default defineConfig({
       "@d402/client": r("./packages/client/src/index.ts"),
       "@d402/mcp": r("./packages/mcp/src/index.ts"),
       "@d402/proxy": r("./packages/proxy/src/index.ts"),
+      "@d402/mcp-seller": r("./packages/mcp-seller/src/index.ts"),
     },
   },
   test: {
