@@ -22,7 +22,7 @@ jobs:
       - run: pnpm build
       - run: pnpm typecheck
       - run: pnpm test
-      - run: BENCH_ROUNDS=10 pnpm bench
+      - run: pnpm bench
       - uses: actions/upload-artifact@v4
         if: matrix.node == 22
         with:
@@ -42,5 +42,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: pnpm install --frozen-lockfile
+      - run: pnpm build
       - run: pip install cryptography requests pytest
       - run: cd clients/python && python -m pytest -q
