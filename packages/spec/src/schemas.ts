@@ -20,6 +20,8 @@ export const D402Accept = z.object({
   scope: z.array(z.string().min(1)).min(1),
   voucherTtl: z.number().int().positive(),
   tiers: z.array(Tier).min(1),
+  /** Plain-language instructions for an agent that has never seen d402. Optional. */
+  hint: z.string().optional(),
 });
 export type D402Accept = z.infer<typeof D402Accept>;
 

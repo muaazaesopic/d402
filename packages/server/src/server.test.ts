@@ -166,7 +166,9 @@ describe("offer", () => {
     const parsed = OfferSchema.parse(body);
     expect(parsed.d402).toBe("1");
     expect(parsed.error).toBeUndefined();
-    expect(body.accepts[0]).toEqual({
+    expect(typeof body.accepts[0].hint).toBe("string");
+    const { hint: _hint, ...rest } = body.accepts[0];
+    expect(rest).toEqual({
       scheme: "d402",
       sellerId: "api.test",
       taskUrl: TASK_URL,

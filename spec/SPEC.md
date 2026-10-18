@@ -48,6 +48,7 @@ body is served on `GET /.well-known/d402` so agents can earn ahead of time.
       "taskTypes": ["classify"],
       "scope": ["/search"],
       "voucherTtl": 86400,
+      "hint": "No wallet needed. To get 10 calls on /search: GET .../tasks?tier=s with a D402-Key header, label the 5 items, POST signed answers, retry with the voucher.",
       "tiers": [
         { "id": "s", "items": 5,  "est_tokens": 1000,  "reward": { "calls": 10 } },
         { "id": "m", "items": 25, "est_tokens": 5000,  "reward": { "calls": 60 } },
@@ -59,6 +60,10 @@ body is served on `GET /.well-known/d402` so agents can earn ahead of time.
 ```
 
 - `taskUrl` is absolute.
+- `hint` (optional) is plain-language text telling an agent that has never seen d402
+  what to do: where to get a bundle, how many items, what it earns, how to sign. Sellers
+  should include it. Agents find their way through a 402 far more often when the body
+  tells them what to do than when it only names a scheme.
 - `scope` is a list of path prefixes the voucher is valid for.
 - `tiers[].items` is the number of items in a bundle. `est_tokens` is advisory,
   so the agent can budget in its own unit. The seller grades in items.

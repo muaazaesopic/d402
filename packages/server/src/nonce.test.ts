@@ -65,6 +65,31 @@ afterEach(() => {
   live = [];
 });
 
+describe("offer hint", () => {
+  it("the offer carries a plain-language hint naming the task URL, tier, item count and reward", async () => {
+    const { d, app } = seller();
+    live.push(d);
+    const body = await (await app.request("http://seller.test/.well-known/d402")).json();
+    const hint: string = body.accepts[0].hint;
+    expect(hint).toContain("No wallet needed");
+    expect(hint).toContain("?tier=s");
+    expect(hint).toContain("2 items");
+    expect(hint).toContain("10 calls");
+    expect(hint).toContain("D402-Voucher");
+    const r402 = await (await app.request("http://seller.test/search")).json();
+    expect(r402.accepts[0].hint).toBe(hint);
+  });
+
+  it("hint can be overridden or removed", async () => {
+    const a = seller({ hint: "custom" });
+    live.push(a.d);
+    expect((await (await a.app.request("http://seller.test/.well-known/d402")).json()).accepts[0].hint).toBe("custom");
+    const b = seller({ hint: "" });
+    live.push(b.d);
+    expect((await (await b.app.request("http://seller.test/.well-known/d402")).json()).accepts[0].hint).toBeUndefined();
+  });
+});
+
 describe("spend nonce (SPEC 7.2)", () => {
   it("accepts a nonce-signed spend and rejects the exact replay with replayed_spend", async () => {
     const { d, app } = seller();

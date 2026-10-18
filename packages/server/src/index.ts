@@ -58,6 +58,8 @@ export interface D402ServerOptions {
   /** Classify labels for the pool (>= 2). */
   labels: string[];
   instructions?: string;
+  /** Plain-language text placed in the offer as `hint` so an agent that has never seen d402 knows what to do. A default is generated. Pass "" to omit. */
+  hint?: string;
   /** sqlite path, default ":memory:". */
   db?: string;
   voucherTtl?: number;
@@ -235,10 +237,21 @@ export function createD402(opts: D402ServerOptions): D402Server {
 
   // -- offer ----------------------------------------------------------------
 
+  const smallestTier = [...accept.tiers].sort((a, b) => a.items - b.items)[0]!;
+  const hint =
+    opts.hint ??
+    `No wallet needed. To get ${smallestTier.reward.calls} calls on ${accept.scope.join(", ")}: ` +
+      `GET ${accept.taskUrl}?tier=${smallestTier.id} with a D402-Key header (your base64url Ed25519 public key), ` +
+      `label each of the ${smallestTier.items} items with one of the given labels, then POST {answers, sig} to ` +
+      `${accept.taskUrl}/{bundleId} where sig is your Ed25519 signature over "d402:submit\n{bundleId}\n{canonical JSON of answers}". ` +
+      `Retry the original request with the returned voucher in a D402-Voucher header. Spec: https://github.com/napoleon1313/d402/blob/main/spec/SPEC.md`;
+
   function offer(error?: ErrorCode, message?: string): Offer {
+    const a = structuredClone(accept);
+    if (hint) a.hint = hint;
     const body: Offer = {
       d402: D402_VERSION,
-      accepts: [structuredClone(accept), ...((opts.otherAccepts ?? []) as Offer["accepts"])],
+      accepts: [a, ...((opts.otherAccepts ?? []) as Offer["accepts"])],
     };
     if (error) body.error = error;
     if (message) body.message = message;
