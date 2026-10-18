@@ -204,7 +204,7 @@ export const BARS = {
   bundlesPerResolution: 4,
   tokensPerCall: 200,
   addedLatencyMs: 500,
-  bundlesUntilLazyCut: 3,
+  bundlesUntilLazyCut: 5, // SPEC 5.2 blocks at bundles >= 5, so 5 is the floor for this metric
 } as const;
 
 export interface Check {

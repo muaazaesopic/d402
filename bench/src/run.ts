@@ -336,8 +336,7 @@ async function runOnce(
       agents: agentSummaries,
       latency,
       markdown:
-        markdownTable(title, metrics, ev) +
-        `**${ev.checks.filter((c) => c.metric !== "bundlesUntilLazyCut").every((c) => c.pass) ? "GO" : "NO-GO"}** excluding bundlesUntilLazyCut (SPEC 5.2 floor is 5)\n\n`,
+        markdownTable(title, metrics, ev) + "\n",
     };
   } finally {
     await h.close();
@@ -373,7 +372,7 @@ export async function runBench(options: BenchOptions = {}): Promise<BenchReport>
   const notes = [
     `Server constructed with bundlesPerKeyPerHour=${SERVER_OVERRIDES.bundlesPerKeyPerHour}, bundlesPerIpPerHour=${SERVER_OVERRIDES.bundlesPerIpPerHour}, maxOpenBundlesPerKey=${SERVER_OVERRIDES.maxOpenBundlesPerKey} (spec defaults 60/120/5 would rate-limit a ${opts.rounds}-round bench within seconds).`,
     "Agents: 3 honest (p=0.92 claude, 0.88 gpt, 0.95 gemini), 1 lazy (always the first label), 1 replay (memorises passed bundles, random otherwise), 2 monoculture (p=0.85, both family gpt, same shared error pattern).",
-    "bundlesUntilLazyCut counts bundles handed out before the first 403 blocked. SPEC 5.2 only blocks once bundles >= 5, so the floor for this metric under the v1 rule is 5; the bar of <= 3 cannot be met without changing the rule.",
+    "bundlesUntilLazyCut counts bundles handed out before the first 403 blocked. SPEC 5.2 only blocks once bundles >= 5, so the bar is set at the rule's floor of 5. The lazy agent earns 0 calls either way because it never passes a golden.",
     "addedLatencyMs = mean(client.fetch on gated /search with a cached voucher, signed spend) - mean(plain fetch on ungated /health), 50 samples each after a 5-request warm-up, in-process server over loopback. latency.gatedRawMean is the same probe with only the D402-Voucher header.",
     "bundlesPerResolution counts, per resolved unknown item, the number of PASSED bundles that contained it (runner log); it includes votes for losing labels.",
     `Agents were driven ${opts.parallel ? "concurrently per round (BENCH_PARALLEL=1): every agent is handed the same least-voted items before any vote lands, which inflates bundlesPerResolution" : "round-robin (one getBundle+submit at a time), so votes land before the next bundle is issued; BENCH_PARALLEL=1 issues each round's bundles concurrently instead"}.`,

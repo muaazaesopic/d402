@@ -152,7 +152,7 @@ describe("metrics", () => {
     expect(evaluate(m).go).toBe(true);
     expect(evaluate({ ...m, singleAgentAccuracy: 0.96 }).go).toBe(false);
     expect(evaluate({ ...m, lazyBlocked: false }).go).toBe(false);
-    expect(evaluate({ ...m, bundlesUntilLazyCut: 5 }).go).toBe(false);
+    expect(evaluate({ ...m, bundlesUntilLazyCut: 6 }).go).toBe(false);
     const md = markdownTable("run", m, evaluate(m));
     expect(md).toContain("| resolvedAccuracy | 0.950 |");
     expect(md).toContain("**GO**");

@@ -41,6 +41,9 @@ importers:
 
   examples/search-proxy:
     dependencies:
+      '@d402/client':
+        specifier: workspace:*
+        version: link:../../packages/client
       '@d402/server':
         specifier: workspace:*
         version: link:../../packages/server

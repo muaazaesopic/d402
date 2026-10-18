@@ -104,10 +104,16 @@ describe("search-proxy example", () => {
     });
     const offer = await client.discover(BASE);
     const accept = findD402Accept(offer)!;
-    await expect(client.earn(accept, "s")).rejects.toMatchObject({ code: "quality", status: 422 });
-    expect(await client.status()).toHaveLength(0);
-    const err = await client.earn(accept, "s").catch((e: unknown) => e);
+    // earn() retries on 422 quality and wraps the last failure as earn_failed.
+    const err = (await client.earn(accept, "s").catch((e: unknown) => e)) as D402Error;
     expect(err).toBeInstanceOf(D402Error);
+    expect(err).toMatchObject({ code: "earn_failed", status: 422 });
+    expect((err.cause as D402Error).code).toBe("quality");
+    expect(await client.status()).toHaveLength(0);
+    // the bare submit path surfaces the 422 directly
+    const bundle = await client.getBundle(accept.taskUrl, "s");
+    const answers = Object.fromEntries(bundle.items.map((i) => [i.id, wrong(goldens[i.id] ?? "world")]));
+    await expect(client.submit(accept.taskUrl, bundle, answers, accept)).rejects.toMatchObject({ code: "quality", status: 422 });
   });
 
   it("search is case-insensitive and empty for unknown terms", () => {
