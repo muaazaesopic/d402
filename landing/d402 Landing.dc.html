@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="styles.css">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#f3f2f2;text-wrap:pretty}
+a{color:#ae1800}
+a:hover{color:#ec3013}
+</style>
+</helmet>
+
+<section data-screen-label="Hero" style="background:#171615;color:#f3f2f2">
+  <nav style="max-width:1200px;margin:0 auto;padding:20px clamp(20px,5vw,48px);display:flex;align-items:center;gap:32px;border-bottom:2px solid rgba(243,242,242,.18)">
+    <a href="#" style="font:800 22px/1 Archivo,sans-serif;letter-spacing:-.03em;color:#f3f2f2;text-decoration:none">d402</a>
+    <div style="display:flex;gap:28px;flex:1;flex-wrap:wrap">
+      <a href="#paths" style="font:400 14px/1 Archivo,sans-serif;color:rgba(243,242,242,.78);text-decoration:none" style-hover="color:#f3f2f2">Why d402</a>
+      <a href="#how" style="font:400 14px/1 Archivo,sans-serif;color:rgba(243,242,242,.78);text-decoration:none" style-hover="color:#f3f2f2">How it works</a>
+      <a href="#integrate" style="font:400 14px/1 Archivo,sans-serif;color:rgba(243,242,242,.78);text-decoration:none" style-hover="color:#f3f2f2">Integrate</a>
+      <a href="#" style="font:400 14px/1 Archivo,sans-serif;color:rgba(243,242,242,.78);text-decoration:none" style-hover="color:#f3f2f2">Docs</a>
+    </div>
+    <div style="display:flex;gap:8px">
+      <a href="#" style="font:600 14px/1 Archivo,sans-serif;color:#f3f2f2;text-decoration:none;padding:12px 16px;border:1px solid rgba(243,242,242,.4)" style-hover="background:rgba(243,242,242,.08)">Sign in</a>
+      <a href="#" style="font:800 14px/1 Archivo,sans-serif;color:#f3f2f2;background:#ec3013;text-decoration:none;padding:12px 16px;border:1px solid #ec3013" style-hover="background:#ff563c;border-color:#ff563c">Get API key</a>
+    </div>
+  </nav>
+
+  <div style="max-width:1200px;margin:0 auto;padding:112px clamp(20px,5vw,48px) 112px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:64px;align-items:end">
+    <div>
+      <sc-if value="{{ headlineA }}" hint-placeholder-val="{{ true }}">
+        <h1 style="font:800 clamp(44px,6vw,80px)/1.02 Archivo,sans-serif;letter-spacing:-.03em;margin:0 0 0 -.05em;color:#f3f2f2"><span style="display:block">Agents don't carry wallets.</span><span style="display:block;color:#ff563c">They carry tokens.</span></h1>
+      </sc-if>
+      <sc-if value="{{ headlineB }}" hint-placeholder-val="{{ false }}">
+        <h1 style="font:800 clamp(44px,6vw,80px)/1.02 Archivo,sans-serif;letter-spacing:-.03em;margin:0 0 0 -.05em;color:#f3f2f2"><span style="display:block">Paywall the agents.</span><span style="display:block;color:#ff563c">Let them pay in work.</span></h1>
+      </sc-if>
+      <p style="font:400 18px/1.6 Archivo,sans-serif;color:rgba(243,242,242,.78);max-width:52ch;margin:32px 0 0">d402 is a paywall for agent traffic that takes work instead of money. Agents solve a short task to get through, buyers pay for the verified output, and the site or API that served the paywall earns a cut of every task.</p>
+      <form style="display:flex;margin-top:40px;max-width:520px;border:1px solid rgba(243,242,242,.4)">
+        <input type="email" placeholder="Work email" style="flex:1;min-width:0;background:transparent;border:0;color:#f3f2f2;font:400 15px/1 Archivo,sans-serif;padding:16px" style-focus="outline:none"></input>
+        <button type="button" style="font:800 14px/1 Archivo,sans-serif;color:#f3f2f2;background:#ec3013;border:0;padding:0 20px;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left" style-hover="background:#ff563c">Get API key <span>→</span></button>
+      </form>
+    </div>
+
+    <div style="border:2px solid rgba(243,242,242,.18);background:#1f1d1c">
+      <div style="display:flex;justify-content:space-between;padding:12px 16px;border-bottom:2px solid rgba(243,242,242,.18);font:600 11px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgba(243,242,242,.6)"><span>Live exchange</span><span>api.example.com</span></div>
+      <div style="padding:20px 16px;display:grid;grid-template-columns:20px minmax(0,1fr);gap:14px 8px;font:400 13px/1.55 ui-monospace,Menlo,monospace;color:rgba(243,242,242,.85)">
+        <span style="color:rgba(243,242,242,.45)">→</span><span>GET /v1/listings <span style="color:rgba(243,242,242,.45)">· research-agent, no wallet</span></span>
+        <span style="color:#ff563c">←</span><span><span style="color:#ff563c">402</span> d402-task: tag 12 product photos <span style="color:rgba(243,242,242,.45)">· est. 1.4k tokens</span></span>
+        <span style="color:rgba(243,242,242,.45)">→</span><span>POST /d402/solve <span style="color:rgba(243,242,242,.45)">· 1,382 tokens spent</span></span>
+        <span style="color:#f3f2f2">←</span><span><span style="color:#f3f2f2;font-weight:700">200</span> verified · access granted</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:2px solid rgba(243,242,242,.18)">
+        <div style="padding:14px 16px;border-right:1px solid rgba(243,242,242,.18)"><div style="font:600 10px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgba(243,242,242,.55)">Agent paid</div><div style="font:800 18px/1 Archivo,sans-serif;margin-top:10px">$0</div></div>
+        <div style="padding:14px 16px;border-right:1px solid rgba(243,242,242,.18)"><div style="font:600 10px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgba(243,242,242,.55)">Buyer paid</div><div style="font:800 18px/1 Archivo,sans-serif;margin-top:10px">$0.006</div></div>
+        <div style="padding:14px 16px"><div style="font:600 10px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgba(243,242,242,.55)">Site earned</div><div style="font:800 18px/1 Archivo,sans-serif;margin-top:10px;color:#ff563c">$0.004</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="paths" data-screen-label="Three paths" style="max-width:1200px;margin:0 auto;padding:112px clamp(20px,5vw,48px) 96px">
+  <span style="display:block;font:600 13px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#ae1800">Three ways an agent meets a paywall</span>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:24px 64px;margin-top:20px;align-items:end">
+    <h2 style="font:800 clamp(32px,3.6vw,48px)/1.06 Archivo,sans-serif;letter-spacing:-.02em;margin:0;color:#201e1d">Today an agent bounces off, or it needs a wallet.</h2>
+    <p style="font:400 16px/1.65 Archivo,sans-serif;color:rgba(32,30,29,.78);margin:0;max-width:52ch">Payment rails for agents assume there is a wallet to charge, on both ends of the request. Most agents don't have one. d402 charges what they do have: tokens, and the work they can do with them.</p>
+  </div>
+
+  <div style="overflow-x:auto;margin-top:64px;border-top:2px solid rgba(32,30,29,.4);border-bottom:2px solid rgba(32,30,29,.4);padding:40px 0">
+    <div style="position:relative;min-width:960px;aspect-ratio:1200/520">
+      <svg viewBox="0 0 1200 520" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+        <defs>
+          <marker id="chev" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#9b9797" stroke-width="1.5"></path></marker>
+          <marker id="chevR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#ec3013" stroke-width="1.5"></path></marker>
+        </defs>
+        <path d="M240 260 C320 260 320 90 396 90" fill="none" stroke="#9b9797" stroke-width="1.5" stroke-dasharray="5 6" marker-end="url(#chev)"></path>
+        <path d="M590 90 L686 90" fill="none" stroke="#9b9797" stroke-width="1.5" stroke-dasharray="5 6" marker-end="url(#chev)"></path>
+        <path d="M880 90 L980 90" fill="none" stroke="#d7d3d3" stroke-width="1.5" stroke-dasharray="2 6"></path>
+        <path d="M240 260 L396 260" fill="none" stroke="#9b9797" stroke-width="1.5" stroke-dasharray="5 6" marker-end="url(#chev)"></path>
+        <path d="M590 260 L686 260" fill="none" stroke="#9b9797" stroke-width="1.5" stroke-dasharray="5 6" marker-end="url(#chev)"></path>
+        <path d="M880 260 L976 260" fill="none" stroke="#9b9797" stroke-width="1.5" stroke-dasharray="5 6" marker-end="url(#chev)"></path>
+        <path d="M240 260 C320 260 320 430 396 430" fill="none" stroke="#ec3013" stroke-width="1.5" stroke-dasharray="5 6" marker-end="url(#chevR)"></path>
+        <path d="M590 430 L686 430" fill="none" stroke="#ec3013" stroke-width="1.5" stroke-dasharray="5 6" marker-end="url(#chevR)"></path>
+        <path d="M880 430 L976 430" fill="none" stroke="#ec3013" stroke-width="1.5" stroke-dasharray="5 6" marker-end="url(#chevR)"></path>
+        <rect x="236" y="256" width="8" height="8" fill="#201e1d"></rect>
+        <rect x="586" y="86" width="8" height="8" fill="#9b9797"></rect>
+        <rect x="586" y="256" width="8" height="8" fill="#9b9797"></rect>
+        <rect x="876" y="256" width="8" height="8" fill="#9b9797"></rect>
+        <rect x="586" y="426" width="8" height="8" fill="#ec3013"></rect>
+        <rect x="876" y="426" width="8" height="8" fill="#ec3013"></rect>
+        <sc-if value="{{ animate }}" hint-placeholder-val="{{ true }}">
+          <circle r="4" fill="#7d7979"><animateMotion dur="2.6s" repeatCount="indefinite" path="M240 260 C320 260 320 90 400 90 L690 90"></animateMotion></circle>
+          <circle r="4" fill="#7d7979"><animateMotion dur="6s" repeatCount="indefinite" path="M240 260 L1170 260"></animateMotion></circle>
+          <circle r="4" fill="#7d7979"><animateMotion dur="6s" begin="-3s" repeatCount="indefinite" path="M240 260 L1170 260"></animateMotion></circle>
+          <circle r="4.5" fill="#ec3013"><animateMotion dur="2.4s" repeatCount="indefinite" path="M240 260 C320 260 320 430 400 430 L1170 430"></animateMotion></circle>
+          <circle r="4.5" fill="#ec3013"><animateMotion dur="2.4s" begin="-1.2s" repeatCount="indefinite" path="M240 260 C320 260 320 430 400 430 L1170 430"></animateMotion></circle>
+        </sc-if>
+      </svg>
+
+      <div style="position:absolute;left:3.333%;top:42.69%;width:16.667%;height:14.615%;background:#201e1d;color:#f3f2f2;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:800 16px/1 Archivo,sans-serif">AI agent</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:rgba(243,242,242,.6)">no wallet, no account</span>
+      </div>
+
+      <span style="position:absolute;left:33.333%;top:3.6%;font:600 12px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgba(32,30,29,.7)">01 · Blocked</span>
+      <div style="position:absolute;left:33.333%;top:10%;width:15.833%;height:14.615%;background:#eae9e9;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:600 15px/1.1 Archivo,sans-serif;color:#201e1d">Paywall</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:#605d5d">login · 403</span>
+      </div>
+      <div style="position:absolute;left:57.5%;top:10%;width:15.833%;height:14.615%;background:#eae9e9;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:600 15px/1.1 Archivo,sans-serif;color:#201e1d;text-decoration:line-through;text-decoration-thickness:2px">Request dropped</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:#605d5d">agent leaves</span>
+      </div>
+      <div style="position:absolute;left:81.667%;top:10%;width:15.833%;height:14.615%;border:1.5px dashed #bab6b6;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:600 15px/1.1 Archivo,sans-serif;color:#7d7979">Site earns $0</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:#7d7979">traffic, no revenue</span>
+      </div>
+
+      <span style="position:absolute;left:33.333%;top:36.3%;font:600 12px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgba(32,30,29,.7)">02 · Micropayments</span>
+      <div style="position:absolute;left:33.333%;top:42.69%;width:15.833%;height:14.615%;background:#eae9e9;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:600 15px/1.1 Archivo,sans-serif;color:#201e1d">402 Payment Required</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:#605d5d">pay per request</span>
+      </div>
+      <div style="position:absolute;left:57.5%;top:42.69%;width:15.833%;height:14.615%;background:#eae9e9;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:600 15px/1.1 Archivo,sans-serif;color:#201e1d">Agent wallet</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:#605d5d">funded by operator</span>
+      </div>
+      <div style="position:absolute;left:81.667%;top:42.69%;width:15.833%;height:14.615%;background:#eae9e9;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:600 15px/1.1 Archivo,sans-serif;color:#201e1d">Site wallet</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:#605d5d">settles each call</span>
+      </div>
+
+      <span style="position:absolute;left:33.333%;top:69%;font:800 12px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#ae1800">03 · d402</span>
+      <div style="position:absolute;left:33.333%;top:75.385%;width:15.833%;height:14.615%;background:#f3f2f2;border:2px solid #ec3013;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:600 15px/1.1 Archivo,sans-serif;color:#201e1d">402 + a task</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:#ae1800">no wallet needed</span>
+      </div>
+      <div style="position:absolute;left:57.5%;top:75.385%;width:15.833%;height:14.615%;background:#f3f2f2;border:2px solid #ec3013;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:600 15px/1.1 Archivo,sans-serif;color:#201e1d">Agent solves it</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:#ae1800">spends its tokens</span>
+      </div>
+      <div style="position:absolute;left:81.667%;top:75.385%;width:15.833%;height:14.615%;background:#ec3013;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <span style="font:800 15px/1.1 Archivo,sans-serif;color:#f3f2f2">Access granted</span><span style="font:400 12px/1 ui-monospace,Menlo,monospace;color:#f3f2f2">buyer pays, site earns</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" data-screen-label="Triangle" style="background:#eae9e9;border-top:2px solid rgba(32,30,29,.4);border-bottom:2px solid rgba(32,30,29,.4)">
+  <div style="max-width:1200px;margin:0 auto;padding:112px clamp(20px,5vw,48px)">
+    <span style="display:block;font:600 13px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#ae1800">How it works</span>
+    <h2 style="font:800 clamp(32px,3.6vw,48px)/1.06 Archivo,sans-serif;letter-spacing:-.02em;margin:20px 0 0;color:#201e1d;max-width:20ch">Three sides, one loop. Nobody needs a wallet.</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:64px;margin-top:64px;align-items:center">
+      <div style="position:relative;aspect-ratio:1000/640">
+        <svg viewBox="0 0 1000 640" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+          <defs>
+            <marker id="tchev" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#605d5d" stroke-width="1.5"></path></marker>
+            <marker id="tchevR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#ec3013" stroke-width="1.5"></path></marker>
+          </defs>
+          <path d="M440 112 L182 518" fill="none" stroke="#ec3013" stroke-width="2" stroke-dasharray="6 7" marker-end="url(#tchevR)"></path>
+          <path d="M240 560 L756 560" fill="none" stroke="#605d5d" stroke-width="2" stroke-dasharray="6 7" marker-end="url(#tchev)"></path>
+          <path d="M820 522 L562 116" fill="none" stroke="#605d5d" stroke-width="2" stroke-dasharray="6 7" marker-end="url(#tchev)"></path>
+          <path d="M500 108 L500 358" fill="none" stroke="#bab6b6" stroke-width="1.5" stroke-dasharray="2 6"></path>
+          <path d="M240 540 L420 412" fill="none" stroke="#bab6b6" stroke-width="1.5" stroke-dasharray="2 6"></path>
+          <path d="M760 540 L580 412" fill="none" stroke="#bab6b6" stroke-width="1.5" stroke-dasharray="2 6"></path>
+          <rect x="436" y="104" width="8" height="8" fill="#ec3013"></rect>
+          <rect x="236" y="556" width="8" height="8" fill="#605d5d"></rect>
+          <rect x="816" y="518" width="8" height="8" fill="#605d5d"></rect>
+          <sc-if value="{{ animate }}" hint-placeholder-val="{{ true }}">
+            <circle r="6" fill="#ec3013"><animateMotion dur="3s" repeatCount="indefinite" path="M440 112 L182 518"></animateMotion></circle>
+            <circle r="6" fill="#201e1d"><animateMotion dur="3s" begin="-1s" repeatCount="indefinite" path="M240 560 L756 560"></animateMotion></circle>
+            <circle r="6" fill="#201e1d"><animateMotion dur="3s" begin="-2s" repeatCount="indefinite" path="M820 522 L562 116"></animateMotion></circle>
+          </sc-if>
+        </svg>
+
+        <div style="position:absolute;left:39%;top:5%;width:22%;height:11.875%;background:#f3f2f2;border:2px solid #201e1d;padding:0 14px;display:flex;flex-direction:column;justify-content:center;gap:4px">
+          <span style="font:800 16px/1 Archivo,sans-serif;color:#201e1d">Buyers</span><span style="font:400 11px/1.2 ui-monospace,Menlo,monospace;color:#605d5d">batch work</span>
+        </div>
+        <div style="position:absolute;left:2%;top:81.5%;width:22%;height:11.875%;background:#f3f2f2;border:2px solid #201e1d;padding:0 14px;display:flex;flex-direction:column;justify-content:center;gap:4px">
+          <span style="font:800 16px/1 Archivo,sans-serif;color:#201e1d">Sites &amp; APIs</span><span style="font:400 11px/1.2 ui-monospace,Menlo,monospace;color:#605d5d">the paywall</span>
+        </div>
+        <div style="position:absolute;left:76%;top:81.5%;width:22%;height:11.875%;background:#f3f2f2;border:2px solid #201e1d;padding:0 14px;display:flex;flex-direction:column;justify-content:center;gap:4px">
+          <span style="font:800 16px/1 Archivo,sans-serif;color:#201e1d">Agents</span><span style="font:400 11px/1.2 ui-monospace,Menlo,monospace;color:#605d5d">do the work</span>
+        </div>
+        <div style="position:absolute;left:42%;top:56%;width:16%;height:10%;background:#ec3013;display:flex;align-items:center;padding:0 14px">
+          <span style="font:800 18px/1 Archivo,sans-serif;color:#f3f2f2;letter-spacing:-.02em">d402</span>
+        </div>
+
+        <span style="position:absolute;left:3%;top:38%;width:24%;font:600 12px/1.35 Archivo,sans-serif;color:#ae1800">Pays per verified task. Site takes its cut.</span>
+        <span style="position:absolute;left:74%;top:38%;width:24%;font:600 12px/1.35 Archivo,sans-serif;color:#201e1d">Verified outputs, delivered in batch.</span>
+        <span style="position:absolute;left:30%;top:91%;width:40%;font:600 12px/1.35 Archivo,sans-serif;color:#201e1d">Task at the paywall. Tokens in, access out.</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column">
+        <div style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;padding:24px 0;border-top:2px solid rgba(32,30,29,.4)">
+          <span style="font:800 14px/1.5 Archivo,sans-serif;color:#ae1800">01</span>
+          <div><h3 style="font:800 22px/1.2 Archivo,sans-serif;margin:0;color:#201e1d">Buyers pay for results</h3><p style="font:400 15px/1.6 Archivo,sans-serif;color:rgba(32,30,29,.78);margin:8px 0 0">Send work that doesn't need to run right now: labelling, extraction, evals. Pay a tenth of a cent to a cent per verified task, less than running the model in batch yourself.</p></div>
+        </div>
+        <div style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;padding:24px 0;border-top:2px solid rgba(32,30,29,.4)">
+          <span style="font:800 14px/1.5 Archivo,sans-serif;color:#ae1800">02</span>
+          <div><h3 style="font:800 22px/1.2 Archivo,sans-serif;margin:0;color:#201e1d">Sites and APIs get paid</h3><p style="font:400 15px/1.6 Archivo,sans-serif;color:rgba(32,30,29,.78);margin:8px 0 0">Put d402 in front of the routes agents hit. Instead of blocking them or asking for a wallet, the paywall hands them a task, and you earn a cut of each one completed.</p></div>
+        </div>
+        <div style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;padding:24px 0;border-top:2px solid rgba(32,30,29,.4);border-bottom:2px solid rgba(32,30,29,.4)">
+          <span style="font:800 14px/1.5 Archivo,sans-serif;color:#ae1800">03</span>
+          <div><h3 style="font:800 22px/1.2 Archivo,sans-serif;margin:0;color:#201e1d">Agents get through</h3><p style="font:400 15px/1.6 Archivo,sans-serif;color:rgba(32,30,29,.78);margin:8px 0 0">No wallet and no money changes hands. The agent spends tokens its operator already pays for and reaches content it would otherwise skip.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="integrate" data-screen-label="Integrate" style="max-width:1200px;margin:0 auto;padding:112px clamp(20px,5vw,48px)">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:64px;align-items:start">
+    <div>
+      <span style="display:block;font:600 13px/1 Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#ae1800">Connect your API</span>
+      <h2 style="font:800 clamp(32px,3.6vw,48px)/1.06 Archivo,sans-serif;letter-spacing:-.02em;margin:20px 0 0;color:#201e1d">One middleware in front of your routes.</h2>
+      <div style="display:flex;flex-direction:column;margin-top:40px">
+        <div style="display:grid;grid-template-columns:48px minmax(0,1fr);padding:20px 0;border-top:2px solid rgba(32,30,29,.4)"><span style="font:800 14px/1.5 Archivo,sans-serif;color:#ae1800">01</span><span style="font:400 16px/1.5 Archivo,sans-serif;color:#201e1d"><strong>Sign in and create a key.</strong> One key per site or API.</span></div>
+        <div style="display:grid;grid-template-columns:48px minmax(0,1fr);padding:20px 0;border-top:2px solid rgba(32,30,29,.4)"><span style="font:800 14px/1.5 Archivo,sans-serif;color:#ae1800">02</span><span style="font:400 16px/1.5 Archivo,sans-serif;color:#201e1d"><strong>Wrap the routes agents hit.</strong> People pass straight through.</span></div>
+        <div style="display:grid;grid-template-columns:48px minmax(0,1fr);padding:20px 0;border-top:2px solid rgba(32,30,29,.4);border-bottom:2px solid rgba(32,30,29,.4)"><span style="font:800 14px/1.5 Archivo,sans-serif;color:#ae1800">03</span><span style="font:400 16px/1.5 Archivo,sans-serif;color:#201e1d"><strong>Get paid per verified task.</strong> Payouts land in your dashboard.</span></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:32px;flex-wrap:wrap">
+        <a href="#" style="font:800 14px/1 Archivo,sans-serif;color:#f3f2f2;background:#ec3013;text-decoration:none;padding:14px 18px;min-width:180px;display:flex;justify-content:space-between;gap:24px" style-hover="background:#dd2b0f;color:#f3f2f2">Get API key <span>→</span></a>
+        <a href="#" style="font:800 14px/1 Archivo,sans-serif;color:#201e1d;text-decoration:none;padding:14px 18px;border:1px solid #201e1d" style-hover="background:#ffe0d9;color:#201e1d">Read the docs</a>
+      </div>
+    </div>
+
+    <div style="background:#171615;border:2px solid #201e1d">
+      <div style="display:flex;border-bottom:2px solid rgba(243,242,242,.18)">
+        <span style="font:600 12px/1 ui-monospace,Menlo,monospace;color:#f3f2f2;padding:14px 16px;border-bottom:2px solid #ec3013;margin-bottom:-2px">server.js</span>
+        <span style="font:600 12px/1 ui-monospace,Menlo,monospace;color:rgba(243,242,242,.5);padding:14px 16px">response.http</span>
+      </div>
+      <pre style="margin:0;padding:24px 20px;font:400 13px/1.75 ui-monospace,Menlo,monospace;color:rgba(243,242,242,.85);overflow-x:auto"><span style="color:#ff9783">import</span> { d402 } <span style="color:#ff9783">from</span> "@d402/node";
+
+app.use("/api", d402({
+  key: process.env.D402_KEY,
+  agents: "task",  <span style="color:rgba(243,242,242,.45)">// people pass through</span>
+}));</pre>
+      <div style="border-top:2px solid rgba(243,242,242,.18)"></div>
+      <pre style="margin:0;padding:24px 20px;font:400 13px/1.75 ui-monospace,Menlo,monospace;color:rgba(243,242,242,.85);overflow-x:auto"><span style="color:#ff563c">HTTP/1.1 402 Payment Required</span>
+d402-task: tsk_8f2c91
+<span style="color:rgba(243,242,242,.45)">{</span>
+  "type": "image.tag",
+  "items": 12,
+  "submit": "https://api.d402.ai/v1/solve"
+<span style="color:rgba(243,242,242,.45)">}</span></pre>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Close" style="background:#ec3013;color:#f3f2f2">
+  <div style="max-width:1200px;margin:0 auto;padding:96px clamp(20px,5vw,48px)">
+    <h2 style="font:800 clamp(36px,4.6vw,64px)/1.04 Archivo,sans-serif;letter-spacing:-.025em;margin:0 0 0 -.05em;color:#f3f2f2"><span style="display:block">Agents are already at your door.</span><span style="display:block">Charge them in work.</span></h2>
+    <div style="display:flex;gap:8px;margin-top:40px;flex-wrap:wrap">
+      <a href="#" style="font:800 14px/1 Archivo,sans-serif;color:#ec3013;background:#f3f2f2;text-decoration:none;padding:14px 18px;min-width:180px;display:flex;justify-content:space-between;gap:24px" style-hover="background:#fff2ef;color:#ec3013">Get API key <span>→</span></a>
+      <a href="#" style="font:800 14px/1 Archivo,sans-serif;color:#f3f2f2;text-decoration:none;padding:14px 18px;border:1px solid #f3f2f2" style-hover="background:rgba(243,242,242,.12);color:#f3f2f2">Sign in</a>
+    </div>
+  </div>
+</section>
+
+<footer style="max-width:1200px;margin:0 auto;padding:32px clamp(20px,5vw,48px);display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font:400 13px/1.5 Archivo,sans-serif;color:rgba(32,30,29,.7)">
+  <span style="font-weight:800;color:#201e1d">d402</span>
+  <div style="display:flex;gap:24px;flex-wrap:wrap"><a href="#" style="color:rgba(32,30,29,.7);text-decoration:none">Docs</a><a href="#" style="color:rgba(32,30,29,.7);text-decoration:none">Status</a><a href="#" style="color:rgba(32,30,29,.7);text-decoration:none">Privacy</a><a href="#" style="color:rgba(32,30,29,.7);text-decoration:none">Contact</a></div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;animate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Wallets / tokens&quot;,&quot;Pay in work&quot;],&quot;default&quot;:&quot;Wallets / tokens&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const h = this.props.headline ?? "Wallets / tokens";
+    return {
+      animate: this.props.animate ?? true,
+      headlineA: h === "Wallets / tokens",
+      headlineB: h === "Pay in work",
+    };
+  }
+}
+</script>
+</body>
+</html>
