@@ -5,3 +5,4 @@ dist/
 *.db
 *.db-journal
 bench/out/
+landing/data/
